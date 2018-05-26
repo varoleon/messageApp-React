@@ -1,0 +1,101 @@
+.selected {
+    text-decoration-line: underline;
+}
+
+label {
+    color: #555;
+    position: relative;
+    left: 14px;
+    transition: all 0.3s;
+}
+
+input:placeholder-shown~label {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-33px);
+}
+
+.invalid-feedback {
+    float: right;
+    width: auto;
+    /* display: inline; */
+}
+
+#spinner-container {
+    position: fixed;
+    margin: auto;
+    top: 50%;
+    background-color: #eee;
+    width: 100px;
+    height: 100px;
+}
+
+#menu {
+    display: flex;
+    list-style: none;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 0.3rem;
+}
+.nav-item{
+    cursor: pointer;
+}
+
+.tab-pane>div {
+    background-color: var(--gray-light);
+    padding: 1.5rem;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.userList-container{
+    height: 10rem;
+    overflow: auto;
+    margin-bottom: .5rem;
+}
+
+.usersList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    
+    align-items: center;
+}
+
+.usersList .usersList-block {
+    background-color: var(--gray-light);
+    color: #333;
+    border:2px solid rgba(0,0,0,0);
+    font-size: 0.85rem;
+    padding: 0.3rem 0.4rem;
+    margin: 0.2rem;
+    border-radius: 6px;
+    transition: 0.3s all;
+}
+
+.usersList .usersList-block:hover {
+    border:2px solid var(--blue);
+    /* background-color: #828e99; */
+    transform: translateY(-3px);
+    box-shadow: 3px 10px 8px #888888;
+    cursor: pointer;
+}
+.icon-clearUser{
+    float: right;
+    display: none;
+}
+.activeIcon{
+    color: var(--secondary);
+    font-size: 1.5rem;
+    display: block;
+    position: absolute;
+    bottom: 4px;
+    right: 1.5rem;
+    cursor: pointer;
+}
+.icon-clearUser:hover{
+    color:var(--danger)
+}
