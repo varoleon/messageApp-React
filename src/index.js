@@ -22,7 +22,7 @@ import { LoginRegisterPanel } from './authentication/LoginRegisterPanel';
 render(
     <HashRouter>
         <div>
-            <Menu />
+            {/* <Menu /> */}
             <hr />
             {/* <SignUp /> */}
             {/* <WithFetching /> */}
