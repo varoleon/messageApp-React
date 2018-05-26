@@ -126,7 +126,7 @@ export class SendMessage extends Component {
 
     send(msgRequest) {
         const request = {
-            url: API_BASE_URL + 'message/sent',
+            url: API_BASE_URL + 'message/send',
             method: 'POST',
             headers: new Headers({
                 'Content-Type': 'application/json',
