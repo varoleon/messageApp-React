@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import { Button } from 'reactstrap'
 import { logout } from '../authentication/Logout';
@@ -6,7 +5,8 @@ import { WelcomePage } from './WelcomePage';
 import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
 import { SendMessage } from './SendMessage';
 import { API_BASE_URL } from '../config/config'
-
+import { MessageReader } from './MessageReader'
+ 
 
 export class App extends Component {
     constructor(props) {
@@ -15,16 +15,19 @@ export class App extends Component {
             logedUser: {
                 name: null,
                 username: null,
-                email: null
+                email: null,
+                roles: []
             },
-            error: null
+            error: null,
+            isLoading: false
         };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
     }
     componentDidMount() {
         if (localStorage.getItem('accessToken')) {
-            this.getCurrentUser();
+            this.setState({isLoading:true})
+            this.handleLogin()
         }
     }
 
@@ -46,12 +49,15 @@ export class App extends Component {
                         logedUser: {
                             name: result.name,
                             username: result.username,
-                            email: result.email
-                        }
+                            email: result.email,
+                            roles: result.roles
+                        },
+                        isLoading: false
                     })
                 },
                 (error) => {
                     this.setState({
+                        isLoading: false,
                         error
                     })
                 }
@@ -61,18 +67,20 @@ export class App extends Component {
     handleLogin() {
         this.getCurrentUser()
     }
+
     handleLogout() {
         logout
         this.setState({
             logedUser: {
                 username: null,
                 name:null,
-                email:null
+                email:null,
+                roles: []
             }
         })
     }
     render() {
-        if (this.state.logedUser.username === null) {
+        if (this.state.logedUser.username === null && !this.state.isLoading) {
             return (<LoginRegisterPanel handleLogin={this.handleLogin} />)
 
         } else {
@@ -82,6 +90,10 @@ export class App extends Component {
                     <h3>Welcome {this.state.logedUser.username}</h3>
                     <Button onClick={this.handleLogout}>Log out</Button>
                     <SendMessage />
+                    <h3>Received Messages</h3>
+                    <MessageReader msgType="received"/>
+                    <h3>Sent Messages</h3>
+                    <MessageReader msgType="sent"/>
                 </div>
             )
         }

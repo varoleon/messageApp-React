@@ -23,15 +23,15 @@ render(
     <HashRouter>
         <div>
             {/* <Menu /> */}
-            <hr />
+            {/* <hr /> */}
             {/* <SignUp /> */}
             {/* <WithFetching /> */}
             
 
             <Switch>
                 <Route exact path="/" component={App} />
-                <Route path="/signup" component={LoginRegisterPanel} />
-                <Route path="/sendmsg" component={SendMessage} />
+                {/* <Route path="/signup" component={LoginRegisterPanel} />
+                <Route path="/sendmsg" component={SendMessage} /> */}
                 {/* <Route path="/mainapp" component={MainApp} /> */}
 
                 <Route path="*" component={Whoops404} />

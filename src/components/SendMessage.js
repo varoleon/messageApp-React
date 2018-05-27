@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input, Alert, Col } from 'reactstrap'
 import { API_BASE_URL } from "../config/config"
 import { UsersList } from './UsersList'
-import UserTimes from 'react-icons/lib/fa/user-times'
+import Clear from 'react-icons/lib/md/clear'
 
 export class SendMessage extends Component {
     constructor(props) {
@@ -198,7 +198,7 @@ export class SendMessage extends Component {
                             </Label>
                             <Col sm={10}>
                                 <div className={`icon-clearUser ${(this.state.receiverUsername) ? "activeIcon" : null}`}>
-                                    <UserTimes onClick={this.clearReceiver} />
+                                    <Clear onClick={this.clearReceiver} />
                                 </div>
                                 <Input type="receiverUsername" id="receiverUsername" name="receiverUsername" placeholder="Username"
                                     invalid={this.state.filteredUsers.length === 0}

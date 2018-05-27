@@ -99,3 +99,41 @@ input:placeholder-shown~label {
 .icon-clearUser:hover{
     color:var(--danger)
 }
+
+.message {
+    background-color: var(--gray-light);
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+    width: 20rem;
+    overflow: hidden;
+}
+.message__header{
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    color: #fff;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message__header .icon{
+    font-size: 1rem;
+}
+.message__header .person span{
+    font-weight: bold;
+}
+
+.message__body{
+    padding: 0.5rem 1rem;    
+}
+
+.message__tools{
+    height: 0;
+    transition: .3s all
+}
+
+.message:hover > .message__tools{
+    height: 2rem;
+    color: red
+}
