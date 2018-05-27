@@ -99,6 +99,14 @@ input:placeholder-shown~label {
 .icon-clearUser:hover{
     color:var(--danger)
 }
+.msgBoard{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 3rem;
+}
+.msgBoard > div{
+    margin: .5rem;
+}
 
 .message {
     background-color: var(--gray-light);

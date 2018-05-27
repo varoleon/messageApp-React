@@ -6,7 +6,7 @@ import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
 import { SendMessage } from './SendMessage';
 import { API_BASE_URL } from '../config/config'
 import { MessageReader } from './MessageReader'
- 
+
 
 export class App extends Component {
     constructor(props) {
@@ -26,7 +26,7 @@ export class App extends Component {
     }
     componentDidMount() {
         if (localStorage.getItem('accessToken')) {
-            this.setState({isLoading:true})
+            this.setState({ isLoading: true })
             this.handleLogin()
         }
     }
@@ -73,8 +73,8 @@ export class App extends Component {
         this.setState({
             logedUser: {
                 username: null,
-                name:null,
-                email:null,
+                name: null,
+                email: null,
                 roles: []
             }
         })
@@ -90,10 +90,16 @@ export class App extends Component {
                     <h3>Welcome {this.state.logedUser.username}</h3>
                     <Button onClick={this.handleLogout}>Log out</Button>
                     <SendMessage />
-                    <h3>Received Messages</h3>
-                    <MessageReader msgType="received"/>
-                    <h3>Sent Messages</h3>
-                    <MessageReader msgType="sent"/>
+                    <div className="msgBoard">
+                        <div>
+                            <h3>Received Messages</h3>
+                            <MessageReader msgType="received" />
+                        </div>
+                        <div>
+                            <h3>Sent Messages</h3>
+                            <MessageReader msgType="sent" />
+                        </div>
+                    </div>
                 </div>
             )
         }
