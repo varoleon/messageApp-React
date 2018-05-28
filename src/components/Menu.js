@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 
 export const Menu = () =>
     <ul id="menu">
-        <li><NavLink to="/" >Home</NavLink></li>
-        <li><NavLink to="/signup" activeClassName='selected'>Sign Up</NavLink></li>
+        <li><NavLink exact to="/" activeClassName='selected' >Home</NavLink></li>
+        <li><NavLink to="/messages" activeClassName='selected'>Messages</NavLink></li>
         <li><NavLink to="/sendmsg" activeClassName='selected'>Send message</NavLink></li>
     </ul>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input, Alert, Col } from 'reactstrap'
-import { API_BASE_URL } from "../config/config"
 import { UsersList } from './UsersList'
-import Clear from 'react-icons/lib/md/clear'
+import { getAllUsersRequest, sendMessageRequest } from './Utils'
 
 export class SendMessage extends Component {
     constructor(props) {
@@ -27,14 +26,7 @@ export class SendMessage extends Component {
     }
 
     componentDidMount() {
-        const request = ({
-            url: API_BASE_URL + "users",
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            })
-        })
+        const request = getAllUsersRequest();
         //Get all users
         fetch(request.url, request)
             .then(res => res.json())
@@ -94,24 +86,29 @@ export class SendMessage extends Component {
             }
         })
 
-        const msgRequest = {
+        const msgReqBody = {
             message: this.state.message,
             receiver: this.state.receiverUsername,
             id: "",
             sender: ""
         }
 
-        this.send(msgRequest)
+        // this.send(msgReqBody)
+        const request = sendMessageRequest(msgReqBody)
+        fetch(request.url, request)
+            .then(res => res.json())
             .then(response => {
                 this.setState({
                     sendStatus: {
                         statusMessage: "Your message has been sent succesfully!",
                         pending: false,
                         success: true
-                    }
+                    },
+                    message: ""
                 })
-            })
-            .catch(error => {
+                this.clearReceiver();
+            }),
+            (error => {
                 this.setState({
                     sendStatus: {
                         statusMessage: error.message,
@@ -121,31 +118,8 @@ export class SendMessage extends Component {
                 })
             })
 
-
     }
 
-    send(msgRequest) {
-        const request = {
-            url: API_BASE_URL + 'message/send',
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            }),
-            body: JSON.stringify(msgRequest)
-        }
-        console.log(msgRequest)
-        return fetch(request.url, request)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json);
-                    }
-                    return json;
-                })
-            )
-
-    }
 
     clearReceiver = () => {
         this.setState(
@@ -197,8 +171,9 @@ export class SendMessage extends Component {
                                 <span>To</span>
                             </Label>
                             <Col sm={10}>
-                                <div className={`icon-clearUser ${(this.state.receiverUsername) ? "activeIcon" : null}`}>
-                                    <Clear onClick={this.clearReceiver} />
+                                <div className={`icon-clearUser ${(this.state.receiverUsername) ? "activeIcon" : ""}`}
+                                    onClick={this.clearReceiver} >
+                                    <i className="fas fa-times"></i>
                                 </div>
                                 <Input type="receiverUsername" id="receiverUsername" name="receiverUsername" placeholder="Username"
                                     invalid={this.state.filteredUsers.length === 0}
@@ -214,11 +189,11 @@ export class SendMessage extends Component {
                         <FormGroup row>
                             <Label for="message" sm={2}>Message</Label>
                             <Col sm={10}>
-                                <Input type="textarea" sm={10} name="message" id="message" placeholder="Your message goes here..." onChange={this.handleChange} />
+                                <Input type="textarea" sm={10} name="message" id="message" placeholder="Your message goes here..." onChange={this.handleChange} value={this.state.message} />
                             </Col>
                         </FormGroup>
                         <Button type="submit" color="primary"
-                             disabled={!this.state.filteredUsers.includes(this.state.receiverUsername)}>Send</Button>
+                            disabled={!this.state.filteredUsers.includes(this.state.receiverUsername)}>Send</Button>
                     </Form>
                 </div>
             </div>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Alert, Input } from 'reactstrap'
 
-import { API_BASE_URL } from '../config/config'
 
 export class UsersList extends Component {
     constructor(props) {

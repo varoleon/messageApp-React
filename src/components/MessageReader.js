@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { API_BASE_URL } from '../config/config'
-import CallMade from 'react-icons/lib/md/call-made'
-import CallReceived from 'react-icons/lib/md/call-received'
+import { getMessagesRequest, deleteMessageRequest } from './Utils'
+
+import { EditMessage } from './EditMessage';
 
 export class MessageReader extends Component {
     constructor(props) {
@@ -9,8 +9,17 @@ export class MessageReader extends Component {
         this.state = {
             messages: [],
             isLoading: true,
+            editMode: false,
+            editResponse: {
+                id: "",
+                message: ""
+            },
             error: null
         }
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
+        this.onSuccessEdit = this.onSuccessEdit.bind(this)
+        this.onFailEdit = this.onFailEdit.bind(this)
     }
 
     componentDidMount() {
@@ -22,15 +31,7 @@ export class MessageReader extends Component {
         }
     }
     getMessages() {
-        const msgType = this.props.msgType
-        const request = ({
-            url: API_BASE_URL + "message/" + msgType + "messages",
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            })
-        })
+        const request = getMessagesRequest(this.props.msgType)
 
         fetch(request.url, request)
             .then(res => res.json())
@@ -46,22 +47,104 @@ export class MessageReader extends Component {
             )
     }
 
-    drawMsgHeader(sender, receiver) {
+    drawEditResponse(id) {
+        // alert (this.state.editResponse.id == id);
+        if (this.state.editResponse.id == id
+            && this.state.editResponse.message.length > 0) {
+            return (
+                <div className="editResponse">
+                    {this.state.editResponse.message}
+                </div>
+            )
+
+        }
+    }
+
+    drawMsgHeader(sender, receiver, id) {
         if (this.props.msgType === 'received') {
             return (
                 <div className="message__header">
                     <div className="person">from: <span>{sender}</span></div>
-                    <div className="icon"><CallReceived /></div>
+                    {this.drawEditResponse(id)}
+                    <div className="icon"><i className="fas fa-arrow-down"></i></div>
                 </div>
             )
         } else if (this.props.msgType === 'sent') {
             return (
                 <div className="message__header">
                     <div className="person">to: <span>{receiver}</span></div>
-                    <div className="icon"><CallMade /></div>
+                    {this.drawEditResponse(id)}
+                    <div className="icon"><i className="fas fa-arrow-up"></i></div>
                 </div>
             )
         }
+    }
+
+    handleEdit(e) {
+        const id = e.target.getAttribute('data-key')
+        if (this.state.editMode == id) {
+            this.setState({ editMode: "" })
+        } else {
+            this.setState({ editMode: id })
+        }
+    }
+
+    handleDelete(e) {
+        //TODO confirmation
+        const id = e.target.getAttribute('data-key')
+        const request = deleteMessageRequest(id)
+
+        fetch(request.url, request)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.removeMsgFromList(id)
+                },
+                (error) => {
+                    this.setState({
+                        editResponse: {
+                            id: id,
+                            message: "Delete error: " + error.message
+                        }
+                    })
+                })
+    }
+    removeMsgFromList(id) {
+        let msgListCopy = this.state.messages.slice()
+        const index = msgListCopy.indexOf(this.state.messages.find(msg => msg.id == id))
+        // ?lert (index);
+        if (index > -1) {
+            msgListCopy.splice(index, 1)
+        }
+        this.setState({
+            messages: msgListCopy
+        })
+    }
+
+    onSuccessEdit(id, txt) {
+        const msgListCopy = this.state.messages.slice();
+        const index = msgListCopy.indexOf(this.state.messages.find(msg => msg.id == id))
+        msgListCopy[index].message = txt;
+        this.setState({
+            editMode: "",
+            editResponse: {
+                id: id,
+                message: "Updated successfully"
+            },
+            messages: msgListCopy
+        })
+
+    }
+
+    onFailEdit(id, txt) {
+        this.setState({
+            editMode: "",
+            editResponse: {
+                id: id,
+                message: "Update fail: " + txt
+            },
+        })
+
     }
 
     render() {
@@ -71,13 +154,22 @@ export class MessageReader extends Component {
                     message =>
                         <div key={message.id} className='message'>
 
-                            {this.drawMsgHeader(message.sender, message.receiver)}
+                            {this.drawMsgHeader(message.sender, message.receiver, message.id)}
 
                             <div className="message__body">
-                                {message.message}
+                                {this.state.editMode == message.id ?
+                                    <EditMessage message={message}
+                                        onSuccess={this.onSuccessEdit}
+                                        onFailure={this.onFailEdit}
+                                    /> :
+                                    message.message}
                             </div>
                             <div className="message__tools">
-                                some tools here
+                                {this.state.editMode != message.id ?
+                                    <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-edit"></i></div> :
+                                    <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-times"></i></div>
+                                }
+                                <div ><i data-key={message.id} onClick={this.handleDelete} className="fas fa-trash-alt"></i></div>
                             </div>
                         </div>
                 )}
