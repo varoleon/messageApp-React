@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input, Alert, Col } from 'reactstrap'
-import { UsersList } from './UsersList'
-import { getAllUsersRequest, sendMessageRequest } from './Utils'
+import { UsersList } from '../users/UsersList'
+import { getAllUsersRequest, sendMessageRequest } from '../utils/Utils'
 
 export class SendMessage extends Component {
     constructor(props) {
@@ -133,8 +133,8 @@ export class SendMessage extends Component {
     render() {
         return (
 
-            <div className="row justify-content-center">
-                <div className="col-sm-12 col-md-8 col-lg-7">
+            <div >
+                
                     <h4>Send Message</h4>
                     {
                         this.state.sendStatus.pending ?
@@ -149,7 +149,7 @@ export class SendMessage extends Component {
 
 
                     <div className="row">
-                        <div className="col-sm-10 offset-sm-2">
+                        <div className="col">
                             <div className="userList-container">
 
                                 <UsersList selection={this.handleSelection}
@@ -192,11 +192,11 @@ export class SendMessage extends Component {
                                 <Input type="textarea" sm={10} name="message" id="message" placeholder="Your message goes here..." onChange={this.handleChange} value={this.state.message} />
                             </Col>
                         </FormGroup>
-                        <Button type="submit" color="primary"
+                        <Button type="submit" color="primary" className="ml-auto d-flex"
                             disabled={!this.state.filteredUsers.includes(this.state.receiverUsername)}>Send</Button>
                     </Form>
                 </div>
-            </div>
+
         )
     }
 }

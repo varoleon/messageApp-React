@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getMessagesRequest, deleteMessageRequest } from './Utils'
+import { getMessagesRequest, deleteMessageRequest } from '../utils/Utils'
 
 import { EditMessage } from './EditMessage';
 
@@ -30,9 +30,10 @@ export class MessageReader extends Component {
             this.getMessages()
         }
     }
+    
     getMessages() {
-        const request = getMessagesRequest(this.props.msgType)
-
+        const request = getMessagesRequest(this.props.msgType,this.props.username)
+        console.log(request)
         fetch(request.url, request)
             .then(res => res.json())
             .then(
@@ -150,6 +151,7 @@ export class MessageReader extends Component {
     render() {
         return (
             <div>
+            {this.props.username}
                 {this.state.messages.map(
                     message =>
                         <div key={message.id} className='message'>

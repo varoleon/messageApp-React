@@ -1,15 +1,20 @@
 import React, { Component } from 'react'
-import { Button } from 'reactstrap'
-import { NavLink } from 'react-router-dom'
-import { logout } from './Utils'
+import { Button, Row, Col } from 'reactstrap'
+import { NavLink, Redirect } from 'react-router-dom'
+import { logout } from '../utils/Utils'
 import { WelcomePage } from './WelcomePage';
 import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
-import { SendMessage } from './SendMessage';
+import { SendMessage } from '../messages/SendMessage';
 import { API_BASE_URL } from '../config/config'
-import { MessageReader } from './MessageReader'
+import { MessageReader } from '../messages/MessageReader'
 import { Menu } from './Menu';
-import { EditMessage } from './EditMessage';
-// import {}
+import { EditMessage } from '../messages/EditMessage';
+import { AdminPanel } from './AdminPanel';
+import { UserListDetails } from '../users/UsersListDetails';
+import { MainHeader } from './MainHeader';
+import { LayoutBody } from './LayoutBody';
+
+
 
 
 export class App extends Component {
@@ -84,6 +89,7 @@ export class App extends Component {
                 roles: []
             }
         })
+
     }
 
     handleMsgClassToggle() {
@@ -99,43 +105,61 @@ export class App extends Component {
             return (<LoginRegisterPanel handleLogin={this.handleLogin} />)
 
         } else {
-            // const msg ={
-            //     id: 5,
-            //     message:"Update Test 1 2",
-            //     sender: "Miltos",
-            //     receiver: "Miltos"
-            // }
             return (
                 (!this.state.isLoading) ?
+
                     <div>
-                        <div className="container">
-                            <Menu />
-                            <h3>Welcome {this.state.logedUser.username}</h3>
-                            <Button onClick={this.handleLogout} size="sm" color="primary" outline >Log out</Button>
+                        <div className="container ">
+                            <Row>
+                                <Col>
+                                    <MainHeader user={this.state.logedUser}
+                                        handleLogout={this.handleLogout} />
+                                </Col>
+                            </Row>
+                            {/* <LayoutBody user={this.state.logedUser}/> */}
+                            <Row id="layoutBody" className="no-gutters">
+                                <Menu user={this.state.logedUser} />
+                                <Col sm={9}>
+                                    <div id="mainContent">
+                                        {
+                                            this.props.location.pathname === "/" ?
+
+                                                <WelcomePage />
+                                                :
+                                                this.props.location.pathname === "/sendmsg" ?
+                                                    <SendMessage />
+                                                    :
+                                                    (this.props.location.pathname === "/messages") ?
+                                                        <div className="messagesContentainer">
+                                                            <Button color="info" className="msgToggler" onClick={this.handleMsgClassToggle}>Received / Sent</Button>
+                                                            <div className="msgBoard">
+                                                                <div className={this.state.showSend ? "showSend" : ""}>
+                                                                    <h3>Received Messages</h3>
+                                                                    <MessageReader msgType="received" />
+                                                                </div>
+                                                                <div className={this.state.showSend ? "showSend" : ""}>
+                                                                    <h3>Sent Messages</h3>
+                                                                    <MessageReader msgType="sent" />
+                                                                </div>
+                                                            </div>
+                                                        </div> :
+                                                        (this.props.location.pathname === "/adminpanel") ?
+                                                            <AdminPanel roles={this.state.logedUser.roles} /> :
+                                                            null
+                                        }
+                                    </div>
+                                </Col>
+
+                            </Row>
+                            {/*<h3>Welcome {this.state.logedUser.username}</h3>
+                            Your roles are: {this.state.logedUser.roles}
+                            <Button onClick={this.handleLogout} size="sm" color="primary" outline >Log out</Button> */}
+                            {/* <UserListDetails /> */}
                         </div>
+
                         {/* <EditMessage message={msg}/> */}
-                        {
-                            this.props.location.pathname === "/sendmsg" ?
-                                <div className="container">
-                                    <SendMessage />
-                                </div>
-                                :
-                                (this.props.location.pathname === "/messages") ?
-                                    <div className="messagesContentainer">
-                                        <Button color="info" className="msgToggler" onClick={this.handleMsgClassToggle}>Received / Sent</Button>
-                                        <div className="msgBoard">
-                                            <div className={this.state.showSend ? "showSend" : ""}>
-                                                <h3>Received Messages</h3>
-                                                <MessageReader msgType="received" />
-                                            </div>
-                                            <div className={this.state.showSend ? "showSend" : ""}>
-                                                <h3>Sent Messages</h3>
-                                                <MessageReader msgType="sent" />
-                                            </div>
-                                        </div>
-                                    </div> :
-                                    null
-                        }
+
+
                     </div> :
                     <div className="container">
                         <div>
@@ -151,19 +175,6 @@ export class App extends Component {
             )
         }
 
-
-
-
     }
 
 }
-                            // export const MainApp = () =>
-
-//     <div className="container">
-//         {!(localStorage.getItem('accessToken')) ? <WelcomePage /> :
-
-
-//             <Button onClick={logout}>Log me out</Button>
-//         }
-
-//     </div>

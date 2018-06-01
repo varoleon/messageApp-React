@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Input, Button } from 'reactstrap'
-import { API_BASE_URL } from '../config/config'
+import { editMsgRequest } from '../utils/Utils'
 
 export class EditMessage extends Component {
     constructor(props) {
@@ -32,14 +32,17 @@ export class EditMessage extends Component {
         }
         console.log(editRequestBody)
 
-        this.edit(editRequestBody)
+        const request = editMsgRequest(editRequestBody)
+
+        fetch(request.url, request)
+            .then(res => res.json())
             .then(response => {
                 this.setState({
                     pending: false
                 })
                 this.props.onSuccess(this.props.message.id, this.state.text)
-            })
-            .catch(error => {
+            }),
+            (error => {
                 this.setState({
                     pending: false,
                     error
@@ -48,28 +51,7 @@ export class EditMessage extends Component {
             })
     }
 
-    edit(editRequest) {
-        const request = {
-            url: API_BASE_URL + 'message/updatemessage',
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            }),
-            body: JSON.stringify(editRequest)
-        }
-        // console.log(msgRequest)
-        return fetch(request.url, request)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json);
-                    }
-                    return json;
-                })
-            )
 
-    }
 
     render() {
         return (

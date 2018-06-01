@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { Button, Form, FormGroup, Label, Input, FormFeedback, Alert } from 'reactstrap'
 
-import { API_BASE_URL } from "../config/config"
+import { signupRequest } from "../utils/Utils"
 
 
 export class SignUp extends Component {
@@ -23,29 +23,28 @@ export class SignUp extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleMessage = this.handleMessage.bind(this);
-        this.signup = this.signup.bind(this);
     }
 
-    signup(signupRequest) {
-        const request = ({
-            url: API_BASE_URL + "auth/signup",
-            method: 'POST',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-            }),
-            body: JSON.stringify(signupRequest)
-        });
+    // signup(signupRequest) {
+    //     const request = ({
+    //         url: API_BASE_URL + "auth/signup",
+    //         method: 'POST',
+    //         headers: new Headers({
+    //             'Content-Type': 'application/json',
+    //         }),
+    //         body: JSON.stringify(signupRequest)
+    //     });
 
-        return fetch(request.url, request)
-            .then(response =>
-                response.json().then(json => {
-                    if (!response.ok) {
-                        return Promise.reject(json);
-                    }
-                    return json;
-                })
-            );
-    }
+    //     return fetch(request.url, request)
+    //         .then(response =>
+    //             response.json().then(json => {
+    //                 if (!response.ok) {
+    //                     return Promise.reject(json);
+    //                 }
+    //                 return json;
+    //             })
+    //         );
+    // }
 
     handleChange(event) {
         console.log(event.target.name);
@@ -100,8 +99,8 @@ export class SignUp extends Component {
                 this.state.usernameValid
         });
     }
-    
-    handleMessage(msg){
+
+    handleMessage(msg) {
         this.props.msghandler(msg)
     }
 
@@ -109,31 +108,34 @@ export class SignUp extends Component {
         // alert(this.state);
         event.preventDefault();
 
-        const signupRequest = {
+
+        this.handleMessage({
+            type: "info",
+            message: "Loading. Plese Wait..."
+        })
+
+        const signupReqBody = {
             name: this.state.name,
             email: this.state.email,
             username: this.state.username,
             password: this.state.password
         }
 
-        this.handleMessage({ 
-            type: "info",
-            message: "Loading. Plese Wait..."
-        })
-
-        this.signup(signupRequest)
+        const request = signupRequest(signupReqBody)
+        fetch(request.url, request)
+            .then(res => res.json())
             .then(response => {
                 this.handleMessage({
-                        type: "success",
-                        message: "User registered successfully. Please login"
-                    })
+                    type: "success",
+                    message: "User registered successfully. Please login"
+                })
                 this.props.tabhandler('login')
-            })
-            .catch(error => {
+            }),
+            (error => {
                 this.handleMessage({
-                        type: "danger",
-                        message: error.message
-                    }
+                    type: "danger",
+                    message: error.message
+                }
                 )
             })
 
@@ -151,70 +153,58 @@ export class SignUp extends Component {
         })
     }
 
-    // assignClass(error) {
-    //     return (error.length === 0 ? 'form-control' : 'form-control is-invalid');
-    // }
-
-    // hasOnlyEmpty(target) {
-    //     let result = true;
-    //     for (var member in target) {
-    //         if (target[member] != "")
-    //             result = false;
-    //     }
-    //     return result;
-    // }
 
     render() {
 
         return (
             <div className="container">
 
-                    <Form onSubmit={this.handleSubmit} autoComplete="off">
+                <Form onSubmit={this.handleSubmit} autoComplete="off">
 
-                        <FormGroup>
-                            <Input type="text" id="username" name="username" placeholder="Username"
-                                invalid={(this.state.formErrors.username.length > 0)}
-                                onChange={this.handleChange}
-                                value={this.state.username}
-                            />
-                            <FormFeedback>{this.state.formErrors.username}</FormFeedback>
-                            <Label for="username">Username</Label>
-                        </FormGroup>
+                    <FormGroup>
+                        <Input type="text" id="username" name="username" placeholder="Username"
+                            invalid={(this.state.formErrors.username.length > 0)}
+                            onChange={this.handleChange}
+                            value={this.state.username}
+                        />
+                        <FormFeedback>{this.state.formErrors.username}</FormFeedback>
+                        <Label for="username">Username</Label>
+                    </FormGroup>
 
-                        <FormGroup>
-                            <Input type="password" id="password" name="password" placeholder="Password"
-                                invalid={(this.state.formErrors.password.length > 0)}
-                                onChange={this.handleChange}
-                                value={this.state.password}
-                            />
+                    <FormGroup>
+                        <Input type="password" id="password" name="password" placeholder="Password"
+                            invalid={(this.state.formErrors.password.length > 0)}
+                            onChange={this.handleChange}
+                            value={this.state.password}
+                        />
 
-                            <FormFeedback>{this.state.formErrors.password}</FormFeedback>
-                            <Label for="password">Password</Label>
-                        </FormGroup>
+                        <FormFeedback>{this.state.formErrors.password}</FormFeedback>
+                        <Label for="password">Password</Label>
+                    </FormGroup>
 
 
-                        <FormGroup>
-                            <Input type="text" id="name" name="name" placeholder="Name"
-                                invalid={(this.state.formErrors.name.length > 0)}
-                                onChange={this.handleChange}
-                                value={this.state.name}
-                            />
-                            <FormFeedback>{this.state.formErrors.name}</FormFeedback>
-                            <Label for="name">Name</Label>
-                        </FormGroup>
+                    <FormGroup>
+                        <Input type="text" id="name" name="name" placeholder="Name"
+                            invalid={(this.state.formErrors.name.length > 0)}
+                            onChange={this.handleChange}
+                            value={this.state.name}
+                        />
+                        <FormFeedback>{this.state.formErrors.name}</FormFeedback>
+                        <Label for="name">Name</Label>
+                    </FormGroup>
 
-                        <FormGroup>
-                            <Input type="email" id="email" name="email" placeholder="Email"
-                                invalid={(this.state.formErrors.email.length > 0)}
-                                onChange={this.handleChange}
-                                value={this.state.email}
-                            />
-                            <FormFeedback>{this.state.formErrors.email}</FormFeedback>
-                            <Label for="email">Email</Label>
-                        </FormGroup>
-                        <Button type="submit" color="primary"
-                            disabled={!this.state.formValid}>Sign up</Button>
-                    </Form>
+                    <FormGroup>
+                        <Input type="email" id="email" name="email" placeholder="Email"
+                            invalid={(this.state.formErrors.email.length > 0)}
+                            onChange={this.handleChange}
+                            value={this.state.email}
+                        />
+                        <FormFeedback>{this.state.formErrors.email}</FormFeedback>
+                        <Label for="email">Email</Label>
+                    </FormGroup>
+                    <Button type="submit" color="primary"
+                        disabled={!this.state.formValid}>Sign up</Button>
+                </Form>
             </div>
 
         )

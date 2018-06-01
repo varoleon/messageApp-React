@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { TabContent, TabPane, Nav, NavItem, NavLink, Alert } from 'reactstrap';
 import { Login } from './Login';
 import { SignUp } from './SignUp';
+import { Redirect } from 'react-router-dom'
+
 
 export class LoginRegisterPanel extends Component {
     constructor(props) {
@@ -42,8 +44,10 @@ export class LoginRegisterPanel extends Component {
     render() {
         return (
 
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-5">
                 <div className="col-10 col-sm-7 col-md-5 col-lg-4">
+                {/* {this.state.alert.type== "success" ? <Redirect to="/" /> : */}
+                
                     {this.state.alert.message.length > 0 ?
                         <Alert color={this.state.alert.type}>
                             {this.state.alert.message}
