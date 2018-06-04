@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Button } from 'reactstrap'
-import { Redirect } from 'react-router'
 
 export class MainHeader extends Component {
     constructor(props) {
@@ -10,10 +8,10 @@ export class MainHeader extends Component {
         return (
             <header className="d-flex justify-content-between align-items-center mainHeader">
                 <div className="logo">
-                <i className="fas fa-comment"></i>
+                    <i className="fas fa-comment"></i>
                 </div >
                 <h4>Hello {this.props.user.username}</h4>
-                <div className="point" onClick={this.props.handleLogout} >Log out</div>
+                <div className="point logout" onClick={this.props.handleLogout} ><span>Log out</span><i className="fas fa-sign-out-alt"></i></div>
             </header >
         )
     }

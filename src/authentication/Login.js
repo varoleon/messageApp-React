@@ -19,12 +19,27 @@ export class Login extends Component {
         this.handleLogin = this.handleLogin.bind(this)
     }
 
+    login(request) {
+        // alert(request)
+        return fetch(request.url, request)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json);
+                    }
+                    return json;
+                })
+            )
+    }
+
     handleMessage(msg) {
         this.props.msghandler(msg)
     }
     handleLogin() {
         this.props.handleLogin()
     }
+
+
 
     handleSubmit(event) {
         event.preventDefault();
@@ -37,12 +52,11 @@ export class Login extends Component {
             usernameOrEmail: this.state.usernameOrEmail,
             password: this.state.password
         }
-
         const request = loginRequest(loginReqBody)
 
-        fetch(request.url, request)
-            .then(res => res.json())
-            .then(response => {
+        console.log(request)
+        this.login(request)
+            .then((response) => {
                 localStorage.setItem('accessToken', response.accessToken)
                 console.log(localStorage.getItem('accessToken'))
                 this.handleMessage({
@@ -51,11 +65,15 @@ export class Login extends Component {
                 })
                 this.setState({ success: true })
                 this.handleLogin()
-            }),
-            (error => {
+            })
+            .catch(error => {
                 this.handleMessage({
                     type: "danger",
-                    message: "Login failed"
+                    message: error.message
+                })
+                this.setState({
+                    usernameOrEmail: "",
+                    password: ""
                 })
             })
     }
@@ -66,56 +84,31 @@ export class Login extends Component {
         const value = event.target.value
 
         this.setState({ [name]: value })
-        // this.setState({ [name]: value },
-        // () => { this.validateField(name, value) });
+
     }
-
-    // validateField(fieldName, value) {
-    //     let usernameOrEmailValid;
-    //     let passwordValid;
-    //     switch (fieldName) {
-    //         case 'usernameOrEmail':
-    //             usernameOrEmailValid = value.length>0;
-    //             this.setState({ usernameOrEmailValid: usernameOrEmailValid })
-    //             break;
-    //         case 'password':
-    //             passwordValid = value.length >= 6;
-    //             this.setState({ passwordValid: passwordValid })
-    //             break;
-    //     }
-
-    // }
 
     render() {
         return (
             <div className="container">
-
-
-
                 <Form onSubmit={this.handleSubmit} autoComplete="off">
 
                     <FormGroup>
                         <Input type="text" name="usernameOrEmail" id="usernameOrEmail" placeholder="Username or Email"
-                            onChange={this.handleChange}
-                        // invalid={
-                        //         (!this.state.usernameOrEmailValid)                 
-                        // } 
+                            onChange={this.handleChange} value={this.state.usernameOrEmail}
                         />
                         <FormFeedback>Required</FormFeedback>
                         <Label for="userameOrEmail" >Username or Email</Label>
                     </FormGroup>
                     <FormGroup>
                         <Input type="password" name="password" id="password" placeholder="Password"
-                            onChange={this.handleChange} />
+                            onChange={this.handleChange} value={this.state.password} />
                         <Label for="password">Password</Label>
                     </FormGroup>
                     <Button type="submit" color="primary"
                         disabled={!(this.state.usernameOrEmail.length > 0 && this.state.password.length > 0)}>
                         Login</Button>
                 </Form>
-
             </div>
-
         )
     }
 }

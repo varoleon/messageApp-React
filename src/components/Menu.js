@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-
 import { NavLink } from 'react-router-dom'
-// import '../stylesheets/menu.css'
 
 
 export class Menu extends Component {
@@ -11,39 +9,42 @@ export class Menu extends Component {
 
     render() {
         return (
-            <div className="col-sm-3" >
-                <div id="sidebar">
-                    <div id="menu" className="d-flex flex-sm-column justify-content-around justify-content-sm-start">
-                        <NavLink exact to="/" activeClassName='selected' >
-                            <div className="navItem">
-                                <span className="d-md-block">Home</span>
-                                <i class="fas fa-home"></i>
-                            </div>
-                        </NavLink>
-                        <NavLink to="/messages" activeClassName='selected'>
-                            <div className="navItem">
-                                <span className="d-md-block">Messages</span>
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </NavLink>
-                        <NavLink to="/sendmsg" activeClassName='selected'>
-                            <div className="navItem">
-                                <span className="d-md-block">Send Message</span>
-                                <i class="fab fa-telegram-plane"></i>
-                            </div>
-                        </NavLink>
-                        {
-                            this.props.user.roles.includes('ROLE_ADMIN') || this.props.user.roles.includes('ROLE_GOD') ?
-                                <NavLink to="/adminpanel" activeClassName='selected'>
-                                    <div className="navItem">
-                                        <span className="d-md-block">Admin panel</span>
-                                        <i class="fas fa-wrench"></i>
-                                    </div>
-                                </NavLink> : null
-                        }
-                    </div>
+            <div id="sidebar">
+                <div id="menu" className="d-flex flex-sm-column justify-content-around justify-content-sm-start">
+                    <NavLink exact to="/" activeClassName='selected' >
+                        <div className="navItem">
+                            <span className="d-md-block">Home</span>
+                            <i className="fas fa-home"></i>
+                        </div>
+                    </NavLink>
+                    <NavLink to="/messages" activeClassName='selected'>
+                        <div className="navItem">
+                            <span className="d-md-block">Messages</span>
+                            <i className="fas fa-envelope"></i>
+                        </div>
+                    </NavLink>
+                    <NavLink to="/sendmsg" activeClassName='selected'>
+                        <div className="navItem">
+                            <span className="d-md-block">Send Message</span>
+                            <i className="fab fa-telegram-plane"></i>
+                        </div>
+                    </NavLink>
+                    <NavLink to="/profile" activeClassName='selected'>
+                        <div className="navItem">
+                            <span className="d-md-block">Your profile</span>
+                            <i className="fas fa-user"></i>
+                        </div>
+                    </NavLink>
+                    {
+                        this.props.user.roles.includes('ROLE_ADMIN') || this.props.user.roles.includes('ROLE_GOD') ?
+                            <NavLink to="/adminpanel" activeClassName='selected'>
+                                <div className="navItem">
+                                    <span className="d-md-block">Admin panel</span>
+                                    <i className="fas fa-wrench"></i>
+                                </div>
+                            </NavLink> : null
+                    }
                 </div>
-
             </div>
         )
     }

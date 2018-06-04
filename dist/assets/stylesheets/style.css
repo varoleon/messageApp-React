@@ -1,41 +1,50 @@
-:root {
-    --myPrimary:#77DC3A;
+body {
+    background: linear-gradient( rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)), url("../img/day.jpeg");
+    background-repeat: repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: right;
+    color: #454545;
 }
 
-body {
-    background:  linear-gradient(rgba(0,0,0,0),rgba(0,0,0,0.6)),url("../img/mailbox.jpg");
-    background-repeat: repeat;
-    background-size: auto;
-    background-attachment: fixed;
-    background-position: right; 
+hr {
+    border-top: 1px solid rgba(0, 0, 0, .3);
 }
-.point{
+
+.container {
+    box-shadow: 3px 3px 15px #333;
+    padding: 0;
+}
+
+.point {
     cursor: pointer;
 }
 
-.mainHeader .point:hover{
-    color:#EFFCBF;
+/***** App main header *****/
+.mainHeader .logout {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    transition: .2s transform;
 }
-    /* height: 100%;
-} */
+
+.mainHeader .logout:hover {
+    transform: translateX(10px) scaleX(.9);
+}
 
 .mainHeader {
     background-color: rgba(203, 241, 64, 0.85);
-    /* color: #540648;  */
     margin-top: 2rem;
     padding: 1rem 2rem;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
 
-.logo>i {
+.logo > i {
     font-size: 3rem;
 }
 
-.logo:hover {
-    /* color: var(--mySecondaryA) */
-}
-
+/***** App body *****/
 #layoutBody {
     min-height: 25rem;
     margin-bottom: 2rem;
@@ -44,28 +53,68 @@ body {
     overflow: hidden;
 }
 
+/***** sidebar *****/
 #sidebar {
-    background-color: #EFFCBF;
+    background-color: rgba(239, 252, 191,.95);
     height: 100%;
     padding-top: 1rem;
 }
-.navItem{
+
+.navItem {
+    position: relative;
     padding: 1rem 1rem;
-    margin: .2rem 0;
     justify-content: space-around;
     display: flex;
+    flex-grow: 1;
     align-items: center;
-    transition: .3s all;
+    transition: .9s color cubic-bezier(1, 0, 0, 1);
 }
-.navItem:hover{
-    background-color: rgba(84,6,72,.75) ;
-    color: white;
+
+.navItem:hover {
+    color: #fff;
 }
-.navItem span{
+
+.navItem::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 3px;
+    background-color: rgba(84, 6, 72, 1);
+    transform: scaleY(0);
+    transition: transform 0.2s, width 0.4s cubic-bezier(1, 0, 0, 1) 0.2s, background-color 0.1s;
+}
+
+.navItem:hover::before {
+    transform: scaleY(1);
+    width: 100%;
+    color: #fff;
+}
+
+.navItem * {
+    z-index: 10;
+}
+
+.navItem span {
     display: none;
     flex-basis: 85%;
     text-align: right;
     padding-right: 1rem;
+}
+
+
+#menu a {
+    color: #444;
+}
+
+#menu a:hover {
+    text-decoration: none;
+}
+
+#menu .selected {
+    background-color: rgba(84, 6, 72, .75);
+    color: white;
 }
 
 #mainContent {
@@ -75,22 +124,12 @@ body {
     height: 100%;
 }
 
-#menu>div {
-    /* margin: 0.2rem 0;
-    background-color: var(--myColor2); */
-    transition: 0.3s all;
-}
-
-#menu a {
-    color: #444;
-}
-#menu a:hover {
-    text-decoration: none;
-}
-
-#menu .selected {
-    /* background-color: #fff;
-    color: #000; */
+/***** Login / Register *****/
+.loginPanel {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .8);
 }
 
 label {
@@ -109,29 +148,26 @@ input:placeholder-shown~label {
 .invalid-feedback {
     float: right;
     width: auto;
-    /* display: inline; */
 }
 
 .form-group {
     margin-bottom: 0.3rem;
 }
 
-.nav-item {
-    cursor: pointer;
-}
-
-.tab-pane>div {
+.tab-pane > div {
     background-color: var(--gray-light);
     padding: 1.5rem;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 
-.userList-container {
+
+/***** User List *****/
+/* .userList-container {
     height: 10rem;
     overflow: auto;
     margin-bottom: .5rem;
-}
+} */
 
 .usersList {
     display: flex;
@@ -152,19 +188,19 @@ input:placeholder-shown~label {
 }
 
 .usersList .usersList-block:hover {
-    border: 2px solid var(--blue);
+    border: 2px solid #77DC3A;
     /* background-color: #828e99; */
     transform: translateY(-3px);
     box-shadow: 3px 6px 6px #222;
     cursor: pointer;
 }
 
-.icon-clearUser {
+/* .icon-clearUser {
     float: right;
     display: none;
-}
+} */
 
-.activeIcon {
+/* .activeIcon {
     color: var(--secondary);
     font-size: 1.4rem;
     display: block;
@@ -172,28 +208,29 @@ input:placeholder-shown~label {
     bottom: 2px;
     right: 1.5rem;
     cursor: pointer;
-}
+} */
 
-.icon-clearUser:hover {
+/* .icon-clearUser:hover {
     color: var(--danger)
-}
+} */
 
-.messagesContentainer {
+/***** Message *****/
+.msgBoard {
     overflow: hidden;
 }
 
 .msgToggler {
     display: block;
-    margin: 1rem auto;
+    margin: .5rem;
 }
 
-.msgBoard {
+.messagesContainer {
     display: flex;
     width: 200%;
     justify-content: space-around;
 }
 
-.msgBoard>div {
+.messagesContainer > div {
     position: relative;
     left: 0%;
     transition: .8s all;
@@ -201,13 +238,13 @@ input:placeholder-shown~label {
     color: var(--gray-dark)
 }
 
-.msgBoard>div.showSend {
+.messagesContainer > div.showSend {
     position: relative;
     left: -50%;
 }
 
 .message {
-    background-color: rgba(60, 60, 60, 0.8);
+    background-color: rgba(60, 60, 60, 0.65);
     color: white;
     border-radius: 5px;
     margin-bottom: 0.5rem;
@@ -215,39 +252,9 @@ input:placeholder-shown~label {
     overflow: hidden;
 }
 
-@media (max-width: 768px) {
-    .message {
-        width: 21rem;
-    }
-}
-
-@media (max-width: 576px) {
-    html{
-        font-size: 15px;
-    }
-    #mainContent{
-        padding: 0.3rem;
-        min-height: 25rem
-    }
-    #sidebar{
-        padding: 0;
-    }
-    .navItem{
-        margin: 0;
-        padding: 1rem 2rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .message {
-        width: 18rem;
-    }
-}
-
-
 .message__header {
     padding: 0.5rem 1rem;
-    background-color:rgb(203, 241, 64);
+    background-color: rgba(203, 241, 64, 0.9);
     color: #223;
     font-size: .9rem;
     display: flex;
@@ -286,24 +293,116 @@ input:placeholder-shown~label {
     transition: .3s all;
 }
 
-.message:hover>.message__tools {
+.message:hover > .message__tools {
     opacity: 1;
     height: 2rem;
-    border-top: 1px solid rgba(203,241,64,0.3);
+    border-top: 1px solid rgba(203, 241, 64, 0.3);
 }
 
-.message:hover>.message__tools>div {
+.message:hover > .message__tools > div {
     transition: .2s all;
 }
 
-.message:hover>.message__tools>div:first-child:hover {
+.message:hover > .message__tools > div:first-child:hover {
     color: var(--success);
     cursor: pointer;
     font-size: 1.3rem;
 }
 
-.message:hover>.message__tools>div:last-child:hover {
+.message:hover > .message__tools > div:last-child:hover {
     color: red;
     cursor: pointer;
     font-size: 1.3rem;
+}
+
+.noMessages {
+    text-align: center;
+    padding: 1rem;
+}
+
+/******** UserCard ********/
+
+.userCard {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.6);
+    width: 17rem;
+    text-align: center;
+    transition: 0.2s all;
+}
+
+.userCard:hover {
+    transform: translateY(-3px);
+    box-shadow: 4px 8px 12px rgba(0, 0, 0, 0.6);
+}
+
+.userCard .userCard__body {
+    padding: 1.25rem;
+}
+
+.userCard .userCard__avatar {
+    display: block;
+    border-radius: 50%;
+    border: 1px solid #bbb;
+    max-width: 8rem;
+    margin: .5rem auto;
+}
+
+.userCard .card-title {
+    border-bottom: 1px solid #bbb;
+}
+
+.filterUserList {
+    max-width: 18rem;
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    display: block;
+}
+
+.edit-close {
+    margin-bottom: 0.5rem;
+    text-align: right;
+}
+
+.edit-close span:hover {
+    color: var(--danger)
+}
+
+.appNotLoading {
+    background-color: rgba(255, 255, 255, .8);
+    display: inline-block;
+    padding: 2rem;
+    margin: 1rem;
+}
+
+@media (max-width: 768px) {
+    .message {
+        width: 21rem;
+    }
+}
+
+@media (max-width: 576px) {
+    html {
+        font-size: 15px;
+    }
+    .mainHeader, .loginPanel {
+        margin-top: 0.5rem;
+        padding: .5rem 1rem;
+    }
+    #mainContent {
+        padding: 1rem;
+        min-height: 25rem
+    }
+    #sidebar {
+        padding: 0;
+    }
+    .navItem {
+        margin: 0;
+    }
+    .container {
+        padding: 0;
+    }
+    .message {
+        width: 18rem;
+    }
 }

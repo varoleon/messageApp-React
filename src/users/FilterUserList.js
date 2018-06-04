@@ -26,14 +26,14 @@ export class FilterUserList extends Component {
 
     filterUsers(name) {
         const filtered = this.props.users.filter(
-            (user) => user.username.indexOf(name) !== -1
+            (user) => user.username.toLowerCase().indexOf(name.toLowerCase()) !== -1
         )
         return filtered
     }
 
     render(){
         return(
-            <Input value={this.props.selected!=null?this.props.selected.username:this.state.value} onChange={this.handleChange}/>
+            <Input value={this.props.selected!=null?this.props.selected.username:this.state.value} onChange={this.handleChange} placeholder="Search a username" className="filterUserList"/>
         )
     }
 }

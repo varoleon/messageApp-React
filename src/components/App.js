@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import { Button, Row, Col } from 'reactstrap'
-import { NavLink, Redirect } from 'react-router-dom'
-import { logout } from '../utils/Utils'
-import { WelcomePage } from './WelcomePage';
+import { Row, Col } from 'reactstrap'
+import { logout, getCurrentUserRequest } from '../utils/Utils'
 import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
-import { SendMessage } from '../messages/SendMessage';
-import { API_BASE_URL } from '../config/config'
-import { MessageReader } from '../messages/MessageReader'
-import { Menu } from './Menu';
-import { EditMessage } from '../messages/EditMessage';
-import { AdminPanel } from './AdminPanel';
-import { UserListDetails } from '../users/UsersListDetails';
-import { MainHeader } from './MainHeader';
-import { LayoutBody } from './LayoutBody';
 
+import { MainHeader } from './MainHeader';
+import { Menu } from './Menu';
+
+import { HomePage } from './HomePage';
+import { YourMessagesPage } from './YourMessagesPage';
+import { SendMessagePage } from '../messages/SendMessagePage';
+import { ProfilePage } from './ProfilePage';
+import { AdminPanel } from './AdminPanel';
 
 
 
@@ -33,7 +30,6 @@ export class App extends Component {
         };
         this.handleLogin = this.handleLogin.bind(this);
         this.handleLogout = this.handleLogout.bind(this);
-        this.handleMsgClassToggle = this.handleMsgClassToggle.bind(this);
     }
     componentDidMount() {
         if (localStorage.getItem('accessToken')) {
@@ -43,17 +39,17 @@ export class App extends Component {
     }
 
     getCurrentUser() {
-        const request = ({
-            url: API_BASE_URL + "users/about/me",
-            method: 'GET',
-            headers: new Headers({
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            })
-        });
+        const request = getCurrentUserRequest()
 
         fetch(request.url, request)
-            .then(res => res.json())
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json);
+                    }
+                    return json;
+                })
+            )
             .then(
                 (result) => {
                     this.setState({
@@ -65,13 +61,13 @@ export class App extends Component {
                         },
                         isLoading: false
                     })
-                },
-                (error) => {
-                    this.setState({
-                        error
-                    })
-                }
-            )
+                })
+            .catch(error => {
+                this.setState({
+                    isLoading: false,
+                    error
+                })
+            })
     }
 
     handleLogin() {
@@ -89,80 +85,51 @@ export class App extends Component {
                 roles: []
             }
         })
-
     }
 
-    handleMsgClassToggle() {
-        if (this.state.showSend) {
-            this.setState({ showSend: false })
-        } else {
-            this.setState({ showSend: true })
-        }
-    }
+
 
     render() {
         if (this.state.logedUser.username === null && !this.state.isLoading) {
             return (<LoginRegisterPanel handleLogin={this.handleLogin} />)
-
         } else {
             return (
                 (!this.state.isLoading) ?
 
                     <div>
                         <div className="container ">
-                            <Row>
-                                <Col>
-                                    <MainHeader user={this.state.logedUser}
-                                        handleLogout={this.handleLogout} />
-                                </Col>
-                            </Row>
-                            {/* <LayoutBody user={this.state.logedUser}/> */}
+                            <MainHeader user={this.state.logedUser}
+                                handleLogout={this.handleLogout} />
                             <Row id="layoutBody" className="no-gutters">
-                                <Menu user={this.state.logedUser} />
+                                <Col sm={3}>
+                                    <Menu user={this.state.logedUser} />
+                                </Col>
                                 <Col sm={9}>
                                     <div id="mainContent">
                                         {
                                             this.props.location.pathname === "/" ?
-
-                                                <WelcomePage />
+                                                <HomePage user={this.state.logedUser} />
                                                 :
                                                 this.props.location.pathname === "/sendmsg" ?
-                                                    <SendMessage />
+                                                    <SendMessagePage />
                                                     :
                                                     (this.props.location.pathname === "/messages") ?
-                                                        <div className="messagesContentainer">
-                                                            <Button color="info" className="msgToggler" onClick={this.handleMsgClassToggle}>Received / Sent</Button>
-                                                            <div className="msgBoard">
-                                                                <div className={this.state.showSend ? "showSend" : ""}>
-                                                                    <h3>Received Messages</h3>
-                                                                    <MessageReader msgType="received" />
-                                                                </div>
-                                                                <div className={this.state.showSend ? "showSend" : ""}>
-                                                                    <h3>Sent Messages</h3>
-                                                                    <MessageReader msgType="sent" />
-                                                                </div>
-                                                            </div>
-                                                        </div> :
-                                                        (this.props.location.pathname === "/adminpanel") ?
-                                                            <AdminPanel roles={this.state.logedUser.roles} /> :
-                                                            null
+                                                        <YourMessagesPage roles={this.state.logedUser.roles} />
+                                                        :
+                                                        (this.props.location.pathname === "/profile") ?
+                                                            <ProfilePage user={this.state.logedUser} />
+                                                            :
+                                                            (this.props.location.pathname === "/adminpanel") ?
+                                                                <AdminPanel user={this.state.logedUser} /> :
+                                                                null
                                         }
                                     </div>
                                 </Col>
-
                             </Row>
-                            {/*<h3>Welcome {this.state.logedUser.username}</h3>
-                            Your roles are: {this.state.logedUser.roles}
-                            <Button onClick={this.handleLogout} size="sm" color="primary" outline >Log out</Button> */}
-                            {/* <UserListDetails /> */}
                         </div>
-
-                        {/* <EditMessage message={msg}/> */}
-
-
                     </div> :
                     <div className="container">
-                        <div>
+                        <div className="appNotLoading">
                             {this.state.error !== null ?
                                 <div>
                                     <h3> Error </h3>
@@ -174,7 +141,6 @@ export class App extends Component {
                     </div>
             )
         }
-
     }
 
 }

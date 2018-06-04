@@ -132,3 +132,41 @@ export const removeRoleRequest = (reqBody) => {
     })
     return request
 }
+
+export const updateNameRequest = (reqBody) => {
+    const request = ({
+        url: API_BASE_URL + "users/updatename",
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        }),
+        body: JSON.stringify(reqBody)
+    })
+    return request
+}
+
+export const updatePasswordRequest = (reqBody) => {
+    const request = ({
+        url: API_BASE_URL + "users/updatepassword",
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        }),
+        body: JSON.stringify(reqBody)
+    })
+    return request
+}
+
+export const getCurrentUserRequest = () => {
+    const request = ({
+        url: API_BASE_URL + "users/about/me",
+        method: 'GET',
+        headers: new Headers({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+        })
+    })
+    return request
+}

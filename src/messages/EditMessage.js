@@ -21,6 +21,19 @@ export class EditMessage extends Component {
         this.setState({ text: e.target.value })
     }
 
+    edit(request) {
+        return fetch(request.url, request)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json);
+                    }
+                    return json;
+                })
+            )
+
+    }
+
     handleSubmit(e) {
         e.preventDefault()
         this.setState({ pending: true })
@@ -30,19 +43,16 @@ export class EditMessage extends Component {
             sender: this.props.message.sender,
             id: this.props.message.id
         }
-        console.log(editRequestBody)
-
         const request = editMsgRequest(editRequestBody)
 
-        fetch(request.url, request)
-            .then(res => res.json())
+        this.edit(request)
             .then(response => {
                 this.setState({
                     pending: false
                 })
                 this.props.onSuccess(this.props.message.id, this.state.text)
-            }),
-            (error => {
+            })
+            .catch(error => {
                 this.setState({
                     pending: false,
                     error
@@ -52,18 +62,17 @@ export class EditMessage extends Component {
     }
 
 
-
     render() {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
                     <Input type='textarea' name='editMsg' className="mb-2" rows={4} value={this.state.text} onChange={this.handleChange} />
-                    <Button type="submit" size="sm" color="success" outline>Edit</Button>
+                    <div className="my-1 text-right">{250 - this.state.text.length} characters left</div>
+                    <Button type="submit" size="sm" color="success" 
+                    disabled={ this.state.text.length > 250 
+                        || this.state.text.length < 1 }>Edit</Button>
                 </Form>
-
             </div>
-
-
         )
     }
 

@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { UserListDetails } from '../users/UsersListDetails';
-import { AddRemoveRole } from '../users/AddRemoveRole';
-import { MessageReader } from '../messages/MessageReader';
+import { UsersListDetails } from '../users/UsersListDetails'
+import { AddRemoveRole } from '../users/AddRemoveRole'
+import { MessageBoard } from '../messages/MessageBoard'
+import { UserCard } from '../users/UserCard'
+import { Row, Col, Button } from 'reactstrap'
+import { EditName } from '../users/EditName'
+import { EditPassword } from '../users/EditPassword'
 
 export class AdminPanel extends Component {
     constructor(props) {
@@ -12,9 +16,25 @@ export class AdminPanel extends Component {
             showMsg: false
         }
         this.selectUser = this.selectUser.bind(this)
-        this.showMessages = this.showMessages.bind(this)
+        this.toggleMessages = this.toggleMessages.bind(this)
         this.onEditRole = this.onEditRole.bind(this)
         this.closeUserCard = this.closeUserCard.bind(this)
+        this.handleUpdateName = this.handleUpdateName.bind(this)
+        this.handlEscape = this.handlEscape.bind(this)
+    }
+
+    componentDidMount() {
+        document.addEventListener('keydown', this.handlEscape, false)
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.handlEscape, false)
+    }
+
+    handlEscape(e) {
+        if (e.keyCode == 27) {
+            this.closeUserCard()
+        }
     }
 
     selectUser(user) {
@@ -31,59 +51,79 @@ export class AdminPanel extends Component {
         })
         return unused.map(role => <li key={role}>{role.substring(5)}</li>)
     }
-    showMessages() {
+    toggleMessages() {
         this.setState({
-            showMsg: true
+            showMsg: !this.state.showMsg
         })
     }
-    onEditRole(user){
-        this.setState({userEditing: user})
+    onEditRole(user) {
+        this.setState({ userEditing: user })
     }
 
-    closeUserCard(){
-        this.setState({userEditing : null})
+    closeUserCard() {
+        this.setState({ userEditing: null })
+    }
+
+    handleUpdateName(name) {
+        const newUser = this.state.userEditing
+        newUser.name = name
+        this.setState({ userEditing: newUser })
     }
 
     render() {
 
-        if (this.props.roles.indexOf('ROLE_ADMIN') != -1 ||
-            this.props.roles.indexOf('ROLE_GOD') != -1) {
+        if (this.props.user.roles.indexOf('ROLE_ADMIN') != -1 ||
+            this.props.user.roles.indexOf('ROLE_GOD') != -1) {
             return (
                 <div>
                     <h3>Admin Panel</h3>
-                    {this.state.userEditing == null ? <UserListDetails onSelect={this.selectUser} /> :
-                        <div>
-                            <div onClick={this.closeUserCard}>close</div>
-                            <div>Username : {this.state.userEditing.username}</div>
-                            <div>Name : {this.state.userEditing.name}</div>
-                            <div>Email : {this.state.userEditing.email}</div>
-                            <div>Roles : <ul>{this.state.userEditing.roles.map(role =>
-                                <li key={role}>{role.substring(5)}</li>
-                            )}</ul></div>
-                            {/* <div>Has Not
-                                <ul>{this.unusedRoles(this.state.userEditing.roles)}</ul>
-                            </div> */}
+                    {
+                        this.state.userEditing == null ?
+                            <UsersListDetails onSelect={this.selectUser} /> :
+                            <div>
+                                <div className='edit-close' onClick={this.closeUserCard}>
+                                    <span className='point'>Close <i className='fas fa-times'></i></span>
+                                </div>
+                                <Row>
+                                    <Col md={6} className='d-flex justify-content-center'>
+                                        <UserCard user={this.state.userEditing} />
+                                    </Col>
+                                    <Col className='mt-3 mt-md-0 d-flex flex-column justify-content-around'>
+                                        <div>
+                                            <div className='mb-1'>Add or Remove roles</div>
+                                            <AddRemoveRole user={this.state.userEditing} onEditRole={this.onEditRole} />
+                                        </div>
 
-                        </div>
+                                        {this.state.userEditing.username == this.props.user.username ?
+                                            <div>
+                                                <div>
+                                                    <div className='mb-1 mt-2'>Edit Name</div>
+                                                    <EditName handleUpdateName={this.handleUpdateName} />
+                                                </div>
+                                                <div>
+                                                    <div className='mb-1 mt-2'>Edit Password</div>
+                                                    <EditPassword />
+                                                </div>
+                                            </div>
+                                            : null}
+                                        <Button className='my-2' onClick={this.toggleMessages} outline>
+                                            {this.state.showMsg ? 'hide' : 'show'} {this.state.userEditing.username}'s Messages</Button>
+                                    </Col>
+                                </Row>
+                                {this.state.showMsg ?
+                                    <div>
+                                        <hr />
+                                        <MessageBoard username={this.state.userEditing.username}
+                                            roles={this.props.user.roles} />
+                                    </div>
+                                    : null
+                                }
+                            </div>
                     }
-                    {this.state.userEditing != null ?
-                        <div>
-                            <AddRemoveRole user={this.state.userEditing} onEditRole={this.onEditRole}/>
-                            <div onClick={this.showMessages}>show Messages</div>
-                            {this.state.showMsg ?
-                                <div className="">
-                                    <MessageReader msgType="received" username={this.state.userEditing.username} />
-                                    <MessageReader msgType="sent" username={this.state.userEditing.username} />
-                                </div> : null
-                            }
-                        </div>
-                        : null}
                 </div>
-
             )
-
         } else {
-            return <Redirect to="/" />
+            return <Redirect to='/' />
         }
     }
 

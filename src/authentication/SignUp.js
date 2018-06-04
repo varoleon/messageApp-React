@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import { Button, Form, FormGroup, Label, Input, FormFeedback, Alert } from 'reactstrap'
-
 import { signupRequest } from "../utils/Utils"
 
 
@@ -25,26 +23,17 @@ export class SignUp extends Component {
         this.handleMessage = this.handleMessage.bind(this);
     }
 
-    // signup(signupRequest) {
-    //     const request = ({
-    //         url: API_BASE_URL + "auth/signup",
-    //         method: 'POST',
-    //         headers: new Headers({
-    //             'Content-Type': 'application/json',
-    //         }),
-    //         body: JSON.stringify(signupRequest)
-    //     });
-
-    //     return fetch(request.url, request)
-    //         .then(response =>
-    //             response.json().then(json => {
-    //                 if (!response.ok) {
-    //                     return Promise.reject(json);
-    //                 }
-    //                 return json;
-    //             })
-    //         );
-    // }
+    signup(request) {
+        return fetch(request.url, request)
+            .then(response =>
+                response.json().then(json => {
+                    if (!response.ok) {
+                        return Promise.reject(json);
+                    }
+                    return json;
+                })
+            );
+    }
 
     handleChange(event) {
         console.log(event.target.name);
@@ -122,21 +111,19 @@ export class SignUp extends Component {
         }
 
         const request = signupRequest(signupReqBody)
-        fetch(request.url, request)
-            .then(res => res.json())
+        this.signup(request)
             .then(response => {
                 this.handleMessage({
                     type: "success",
                     message: "User registered successfully. Please login"
                 })
                 this.props.tabhandler('login')
-            }),
-            (error => {
+            })
+            .catch(error => {
                 this.handleMessage({
                     type: "danger",
                     message: error.message
-                }
-                )
+                })
             })
 
 
@@ -153,12 +140,10 @@ export class SignUp extends Component {
         })
     }
 
-
     render() {
 
         return (
             <div className="container">
-
                 <Form onSubmit={this.handleSubmit} autoComplete="off">
 
                     <FormGroup>
@@ -206,7 +191,6 @@ export class SignUp extends Component {
                         disabled={!this.state.formValid}>Sign up</Button>
                 </Form>
             </div>
-
         )
 
     }

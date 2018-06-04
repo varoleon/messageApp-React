@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getAllUsersDetailsRequest } from '../utils/Utils'
 import { FilterUserList } from './FilterUserList';
 
-export class UserListDetails extends Component {
+export class UsersListDetails extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -37,14 +37,16 @@ export class UserListDetails extends Component {
         const id = e.target.id
         const index = this.state.users.indexOf(this.state.users.find(user => user.id == id))
         const selected = this.state.users[index]
-        this.setState({ selectedUser: selected })
+        this.setState({ 
+            selectedUser: selected,
+            filtered: [selected]
+         })
         //return user
         this.props.onSelect(selected)
-        console.log(this.state.users[index])
     }
 
     filterHandler(list) {
-        this.setState({ 
+        this.setState({
             filtered: list,
             selectedUser: null
         })
@@ -52,13 +54,17 @@ export class UserListDetails extends Component {
 
     render() {
         return (
-            <div className="usersList">
+            <div>
+                Select a User
                 <FilterUserList users={this.state.users}
                     filterHandler={this.filterHandler}
-                    selected={this.state.selectedUser} />
-                {this.state.filtered.map(user =>
-                    <div key={user.id} id={user.id} className="usersList-block" onClick={this.handleClick}> {user.username} </div>
-                )}
+                    selected={this.state.selectedUser} 
+                    />
+                <div className="usersList">
+                    {this.state.filtered.map(user =>
+                        <div key={user.id} id={user.id} className="usersList-block" onClick={this.handleClick}> {user.username} </div>
+                    )}
+                </div>
             </div>
         )
     }

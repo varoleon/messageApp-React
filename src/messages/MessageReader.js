@@ -30,10 +30,9 @@ export class MessageReader extends Component {
             this.getMessages()
         }
     }
-    
+
     getMessages() {
-        const request = getMessagesRequest(this.props.msgType,this.props.username)
-        console.log(request)
+        const request = getMessagesRequest(this.props.msgType, this.props.username)
         fetch(request.url, request)
             .then(res => res.json())
             .then(
@@ -49,7 +48,6 @@ export class MessageReader extends Component {
     }
 
     drawEditResponse(id) {
-        // alert (this.state.editResponse.id == id);
         if (this.state.editResponse.id == id
             && this.state.editResponse.message.length > 0) {
             return (
@@ -110,6 +108,7 @@ export class MessageReader extends Component {
                     })
                 })
     }
+
     removeMsgFromList(id) {
         let msgListCopy = this.state.messages.slice()
         const index = msgListCopy.indexOf(this.state.messages.find(msg => msg.id == id))
@@ -151,30 +150,35 @@ export class MessageReader extends Component {
     render() {
         return (
             <div>
-            {this.props.username}
-                {this.state.messages.map(
-                    message =>
-                        <div key={message.id} className='message'>
+                <div className="mb-1 text-right">{this.state.messages.length} messages</div>
+                {this.state.messages.length < 1 ? <div className="message noMessages">No messages</div> :
+                    this.state.messages.map(
+                        message =>
+                            <div key={message.id} className='message'>
 
-                            {this.drawMsgHeader(message.sender, message.receiver, message.id)}
+                                {this.drawMsgHeader(message.sender, message.receiver, message.id)}
 
-                            <div className="message__body">
-                                {this.state.editMode == message.id ?
-                                    <EditMessage message={message}
-                                        onSuccess={this.onSuccessEdit}
-                                        onFailure={this.onFailEdit}
-                                    /> :
-                                    message.message}
+                                <div className="message__body">
+                                    {this.state.editMode == message.id ?
+                                        <EditMessage message={message}
+                                            onSuccess={this.onSuccessEdit}
+                                            onFailure={this.onFailEdit}
+                                        /> :
+                                        message.message}
+                                </div>
+                                <div className="message__tools">
+                                    {
+                                        (this.props.roles.indexOf('ROLE_ADMIN') != -1 ||
+                                            this.props.roles.indexOf('ROLE_GOD') != -1) ?
+                                            this.state.editMode != message.id ?
+                                                <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-edit"></i></div> :
+                                                <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-times"></i></div>
+                                            : null
+                                    }
+                                    <div ><i data-key={message.id} onClick={this.handleDelete} className="fas fa-trash-alt"></i></div>
+                                </div>
                             </div>
-                            <div className="message__tools">
-                                {this.state.editMode != message.id ?
-                                    <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-edit"></i></div> :
-                                    <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-times"></i></div>
-                                }
-                                <div ><i data-key={message.id} onClick={this.handleDelete} className="fas fa-trash-alt"></i></div>
-                            </div>
-                        </div>
-                )}
+                    )}
             </div>
         )
     }
