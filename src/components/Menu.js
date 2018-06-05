@@ -11,12 +11,6 @@ export class Menu extends Component {
         return (
             <div id="sidebar">
                 <div id="menu" className="d-flex flex-sm-column justify-content-around justify-content-sm-start">
-                    <NavLink exact to="/" activeClassName='selected' >
-                        <div className="navItem">
-                            <span className="d-md-block">Home</span>
-                            <i className="fas fa-home"></i>
-                        </div>
-                    </NavLink>
                     <NavLink to="/messages" activeClassName='selected'>
                         <div className="navItem">
                             <span className="d-md-block">Messages</span>
@@ -44,6 +38,12 @@ export class Menu extends Component {
                                 </div>
                             </NavLink> : null
                     }
+                    <NavLink to="/about" activeClassName='selected' >
+                        <div className="navItem">
+                            <span className="d-md-block">About</span>
+                            <i className="fas fa-info"></i>
+                        </div>
+                    </NavLink>
                 </div>
             </div>
         )

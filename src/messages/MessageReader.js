@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { getMessagesRequest, deleteMessageRequest } from '../utils/Utils'
+import { Alert } from 'reactstrap'
 
 import { EditMessage } from './EditMessage';
 
@@ -10,6 +11,7 @@ export class MessageReader extends Component {
             messages: [],
             isLoading: true,
             editMode: false,
+            deleteConfMsg: null,
             editResponse: {
                 id: "",
                 message: ""
@@ -20,6 +22,8 @@ export class MessageReader extends Component {
         this.handleDelete = this.handleDelete.bind(this)
         this.onSuccessEdit = this.onSuccessEdit.bind(this)
         this.onFailEdit = this.onFailEdit.bind(this)
+        this.deleteConfirmation = this.deleteConfirmation.bind(this)
+        this.closeConfirm = this.closeConfirm.bind(this)
     }
 
     componentDidMount() {
@@ -84,7 +88,10 @@ export class MessageReader extends Component {
         if (this.state.editMode == id) {
             this.setState({ editMode: "" })
         } else {
-            this.setState({ editMode: id })
+            this.setState({ 
+                editMode: id,
+                deleteConfMsg:null
+             })
         }
     }
 
@@ -146,6 +153,17 @@ export class MessageReader extends Component {
         })
 
     }
+    deleteConfirmation(e) {
+        this.setState({
+            deleteConfMsg: e.target.getAttribute('data-key')
+        })
+    }
+
+    closeConfirm() {
+        this.setState({
+            deleteConfMsg: false
+        })
+    }
 
     render() {
         return (
@@ -155,9 +173,24 @@ export class MessageReader extends Component {
                     this.state.messages.map(
                         message =>
                             <div key={message.id} className='message'>
+                            
 
                                 {this.drawMsgHeader(message.sender, message.receiver, message.id)}
 
+                            {this.state.deleteConfMsg == message.id ?
+                                    <Alert color="danger" className="confirmation">
+                                        Are you sure you want to delete this message?
+                                        <div className="d-flex justify-content-around">
+                                            <div onClick={this.handleDelete} data-key={message.id} className="point text-danger">
+                                            Yes, delete it now!
+                                            </div> 
+                                            <div onClick={this.closeConfirm} className="point text-success">
+                                            No, keep it
+                                            </div>
+                                        </div>    
+                                    </Alert>
+                                    : null
+                                }
                                 <div className="message__body">
                                     {this.state.editMode == message.id ?
                                         <EditMessage message={message}
@@ -175,8 +208,12 @@ export class MessageReader extends Component {
                                                 <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-times"></i></div>
                                             : null
                                     }
-                                    <div ><i data-key={message.id} onClick={this.handleDelete} className="fas fa-trash-alt"></i></div>
+                                    <div >
+                                        <i data-key={message.id} onClick={this.deleteConfirmation} className="fas fa-trash-alt"></i>
+                                    </div>
+
                                 </div>
+                                
                             </div>
                     )}
             </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import { Row, Col } from 'reactstrap'
 import { logout, getCurrentUserRequest } from '../utils/Utils'
 import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
@@ -6,7 +7,7 @@ import { LoginRegisterPanel } from '../authentication/LoginRegisterPanel';
 import { MainHeader } from './MainHeader';
 import { Menu } from './Menu';
 
-import { HomePage } from './HomePage';
+import { AboutPage } from './AboutPage';
 import { YourMessagesPage } from './YourMessagesPage';
 import { SendMessagePage } from '../messages/SendMessagePage';
 import { ProfilePage } from './ProfilePage';
@@ -108,20 +109,22 @@ export class App extends Component {
                                     <div id="mainContent">
                                         {
                                             this.props.location.pathname === "/" ?
-                                                <HomePage user={this.state.logedUser} />
-                                                :
-                                                this.props.location.pathname === "/sendmsg" ?
-                                                    <SendMessagePage />
+                                                <Redirect to="/messages" /> :
+                                                (this.props.location.pathname === "/messages") ?
+                                                    <YourMessagesPage roles={this.state.logedUser.roles} />
                                                     :
-                                                    (this.props.location.pathname === "/messages") ?
-                                                        <YourMessagesPage roles={this.state.logedUser.roles} />
+                                                    this.props.location.pathname === "/sendmsg" ?
+                                                        <SendMessagePage />
                                                         :
                                                         (this.props.location.pathname === "/profile") ?
                                                             <ProfilePage user={this.state.logedUser} />
                                                             :
                                                             (this.props.location.pathname === "/adminpanel") ?
                                                                 <AdminPanel user={this.state.logedUser} /> :
-                                                                null
+                                                                this.props.location.pathname === "/about" ?
+                                                                    <AboutPage user={this.state.logedUser} />
+                                                                    :
+                                                                    null
                                         }
                                     </div>
                                 </Col>

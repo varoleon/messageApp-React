@@ -10,6 +10,9 @@ body {
 hr {
     border-top: 1px solid rgba(0, 0, 0, .3);
 }
+ul {
+    list-style: none
+}
 
 .container {
     box-shadow: 3px 3px 15px #333;
@@ -106,6 +109,7 @@ hr {
 
 #menu a {
     color: #444;
+    flex-grow: 1;
 }
 
 #menu a:hover {
@@ -163,11 +167,6 @@ input:placeholder-shown~label {
 
 
 /***** User List *****/
-/* .userList-container {
-    height: 10rem;
-    overflow: auto;
-    margin-bottom: .5rem;
-} */
 
 .usersList {
     display: flex;
@@ -195,24 +194,6 @@ input:placeholder-shown~label {
     cursor: pointer;
 }
 
-/* .icon-clearUser {
-    float: right;
-    display: none;
-} */
-
-/* .activeIcon {
-    color: var(--secondary);
-    font-size: 1.4rem;
-    display: block;
-    position: absolute;
-    bottom: 2px;
-    right: 1.5rem;
-    cursor: pointer;
-} */
-
-/* .icon-clearUser:hover {
-    color: var(--danger)
-} */
 
 /***** Message *****/
 .msgBoard {
@@ -249,7 +230,8 @@ input:placeholder-shown~label {
     border-radius: 5px;
     margin-bottom: 0.5rem;
     width: 24rem;
-    overflow: hidden;
+    position: relative;
+    /* overflow: hidden; */
 }
 
 .message__header {
@@ -313,6 +295,11 @@ input:placeholder-shown~label {
     color: red;
     cursor: pointer;
     font-size: 1.3rem;
+}
+
+.confirmation{
+    position: relative;
+    top: 1rem;
 }
 
 .noMessages {

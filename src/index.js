@@ -14,6 +14,7 @@ render(
                 <Route path="/sendmsg" component={App} /> 
                 <Route path="/adminpanel" component={App} /> 
                 <Route path="/profile" component={App} /> 
+                <Route path="/about" component={App} /> 
 
                 <Route path="*" component={Whoops404} />
             </Switch>
