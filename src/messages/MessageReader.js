@@ -88,15 +88,15 @@ export class MessageReader extends Component {
         if (this.state.editMode == id) {
             this.setState({ editMode: "" })
         } else {
-            this.setState({ 
+            this.setState({
                 editMode: id,
-                deleteConfMsg:null
-             })
+                deleteConfMsg: null
+            })
         }
     }
 
     handleDelete(e) {
-        //TODO confirmation
+
         const id = e.target.getAttribute('data-key')
         const request = deleteMessageRequest(id)
 
@@ -104,7 +104,10 @@ export class MessageReader extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    this.removeMsgFromList(id)
+                    document.getElementById(this.props.msgType+id).classList.add("deleteMessage")
+                    setTimeout(() =>
+                        this.removeMsgFromList(id),
+                        600)
                 },
                 (error) => {
                     this.setState({
@@ -172,22 +175,22 @@ export class MessageReader extends Component {
                 {this.state.messages.length < 1 ? <div className="message noMessages">No messages</div> :
                     this.state.messages.map(
                         message =>
-                            <div key={message.id} className='message'>
-                            
+                            <div key={message.id} id={this.props.msgType+message.id} className='message'>
+
 
                                 {this.drawMsgHeader(message.sender, message.receiver, message.id)}
 
-                            {this.state.deleteConfMsg == message.id ?
+                                {this.state.deleteConfMsg == message.id ?
                                     <Alert color="danger" className="confirmation">
                                         Are you sure you want to delete this message?
                                         <div className="d-flex justify-content-around">
                                             <div onClick={this.handleDelete} data-key={message.id} className="point text-danger">
-                                            Yes, delete it now!
-                                            </div> 
-                                            <div onClick={this.closeConfirm} className="point text-success">
-                                            No, keep it
+                                                Yes, delete it now!
                                             </div>
-                                        </div>    
+                                            <div onClick={this.closeConfirm} className="point text-success">
+                                                No, keep it
+                                            </div>
+                                        </div>
                                     </Alert>
                                     : null
                                 }
@@ -213,7 +216,7 @@ export class MessageReader extends Component {
                                     </div>
 
                                 </div>
-                                
+
                             </div>
                     )}
             </div>

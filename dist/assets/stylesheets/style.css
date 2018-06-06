@@ -188,7 +188,6 @@ input:placeholder-shown~label {
 
 .usersList .usersList-block:hover {
     border: 2px solid #77DC3A;
-    /* background-color: #828e99; */
     transform: translateY(-3px);
     box-shadow: 3px 6px 6px #222;
     cursor: pointer;
@@ -231,7 +230,8 @@ input:placeholder-shown~label {
     margin-bottom: 0.5rem;
     width: 24rem;
     position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
+    transition: .6s all ease-in;
 }
 
 .message__header {
@@ -302,6 +302,11 @@ input:placeholder-shown~label {
     top: 1rem;
 }
 
+.deleteMessage{
+    transform:translateY(400px) rotateZ(90deg);
+    transform-origin: top left;
+    opacity: 0;
+}
 .noMessages {
     text-align: center;
     padding: 1rem;
