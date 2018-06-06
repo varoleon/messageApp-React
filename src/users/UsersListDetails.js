@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { getAllUsersDetailsRequest } from '../utils/Utils'
-import { FilterUserList } from './FilterUserList';
+import { FilterUserList } from './FilterUserList'
+import { Alert } from 'reactstrap'
 
 export class UsersListDetails extends Component {
     constructor(props) {
@@ -19,14 +20,20 @@ export class UsersListDetails extends Component {
         const request = getAllUsersDetailsRequest()
 
         fetch(request.url, request)
-            .then(res => res.json())
+            .then(res => res.json()
+                .then(json => {
+                    if (!res.ok) {
+                        return Promise.reject(json)
+                    }
+                    return json
+                }))
             .then(result =>
                 this.setState({
                     users: result,
                     filtered: result
                 })
-            ),
-            (error =>
+            )
+            .catch(error =>
                 this.setState({
                     error
                 })
@@ -37,10 +44,10 @@ export class UsersListDetails extends Component {
         const id = e.target.id
         const index = this.state.users.indexOf(this.state.users.find(user => user.id == id))
         const selected = this.state.users[index]
-        this.setState({ 
+        this.setState({
             selectedUser: selected,
             filtered: [selected]
-         })
+        })
         //return user
         this.props.onSelect(selected)
     }
@@ -58,12 +65,14 @@ export class UsersListDetails extends Component {
                 Select a User
                 <FilterUserList users={this.state.users}
                     filterHandler={this.filterHandler}
-                    selected={this.state.selectedUser} 
-                    />
-                <div className="usersList">
-                    {this.state.filtered.map(user =>
-                        <div key={user.id} id={user.id} className="usersList-block" onClick={this.handleClick}> {user.username} </div>
-                    )}
+                    selected={this.state.selectedUser}
+                />
+                <div className='usersList'>
+                    {this.state.error ?
+                        <Alert color='danger'>{this.state.error.message}</Alert> :
+                        this.state.filtered.map(user =>
+                            <div key={user.id} id={user.id} className='usersList-block' onClick={this.handleClick}> {user.username} </div>
+                        )}
                 </div>
             </div>
         )

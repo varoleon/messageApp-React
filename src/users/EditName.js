@@ -6,7 +6,7 @@ export class EditName extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: "",
+            value: '',
             success: null
         }
         this.handleChange = this.handleChange.bind(this)
@@ -31,9 +31,9 @@ export class EditName extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
             )
             .then(response => {
@@ -48,19 +48,19 @@ export class EditName extends Component {
             <Form onSubmit={this.handleSubmit} >
                 <Row noGutters>
                     <Col xs={8}>
-                        <Input type="text" name="newName" id="newName"
-                            value={this.state.value} placeholder="New name"
+                        <Input type='text' name='newName' id='newName'
+                            value={this.state.value} placeholder='New name'
                             onChange={this.handleChange}
                         />
                     </Col>
                     <Col>
-                        <Button type="submit">ok</Button>
+                        <Button type='submit'>ok</Button>
                     </Col>
                     <Col>
                         {this.state.success != null ?
                             this.state.success ?
-                                <i style={{ color: "green" }} className="fas fa-check p-2"></i>
-                                : <i style={{ color: "red" }} className="fas fa-times p-2"></i>
+                                <i style={{ color: 'green' }} className='fas fa-check p-2'></i>
+                                : <i style={{ color: 'red' }} className='fas fa-times p-2'></i>
                             : null
                         }
                     </Col>

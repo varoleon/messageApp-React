@@ -7,7 +7,7 @@ export class AddRemoveRole extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedRole: "ROLE_ADMIN",
+            selectedRole: 'ROLE_ADMIN',
             selectedRoleId: 2
         }
         this.handleChange = this.handleChange.bind(this)
@@ -16,20 +16,20 @@ export class AddRemoveRole extends Component {
 
     transformRole(role) {
         switch (role.toUpperCase()) {
-            case "ROLE_ADMIN":
+            case 'ROLE_ADMIN':
                 return 2
-                break;
-            case "ROLE_GOD":
+                break
+            case 'ROLE_GOD':
                 return 3
-                break;
+                break
             default:
                 return 2
-                break;
+                break
         }
     }
 
     handleChange(e) {
-        const sel = "ROLE_" + e.target.value.toUpperCase()
+        const sel = 'ROLE_' + e.target.value.toUpperCase()
 
         this.setState({
             selectedRole: sel,
@@ -73,17 +73,17 @@ export class AddRemoveRole extends Component {
 
     drawButton() {
         if (!this.props.user.roles.includes(this.state.selectedRole)) {
-            return <Button color="success" onClick={this.handleSubmit}>Add</Button>
+            return <Button color='success' onClick={this.handleSubmit}>Add</Button>
         } else {
-            return <Button color="danger" onClick={this.handleSubmit}>Remove</Button>
+            return <Button color='danger' onClick={this.handleSubmit}>Remove</Button>
         }
 
     }
 
     render() {
         return (
-            <div className="d-flex">
-                <Input className="mr-2" onChange={this.handleChange} type="select" name="selectRole" id="selectRole">
+            <div className='d-flex'>
+                <Input className='mr-2' onChange={this.handleChange} type='select' name='selectRole' id='selectRole'>
                     <option >Admin</option>
                     <option >God</option>
                 </Input>

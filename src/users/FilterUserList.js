@@ -5,7 +5,7 @@ export class FilterUserList extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value:"",
+            value:'',
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -33,7 +33,7 @@ export class FilterUserList extends Component {
 
     render(){
         return(
-            <Input value={this.props.selected!=null?this.props.selected.username:this.state.value} onChange={this.handleChange} placeholder="Search a username" className="filterUserList"/>
+            <Input value={this.props.selected!=null?this.props.selected.username:this.state.value} onChange={this.handleChange} placeholder='Search a username' className='filterUserList'/>
         )
     }
 }

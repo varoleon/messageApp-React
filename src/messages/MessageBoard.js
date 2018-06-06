@@ -22,19 +22,19 @@ export class MessageBoard extends Component {
 
     render() {
         return (
-            <div className="msgBoard">
-                <Button className="msgToggler" onClick={this.handleMsgClassToggle} outline>
-                {this.state.showSend? "Go to received" :"Go to sent"}</Button>
-                <div className="messagesContainer">
-                    <div className={this.state.showSend ? "showSend" : ""}>
+            <div className='msgBoard'>
+                <Button className='msgToggler' onClick={this.handleMsgClassToggle} outline>
+                {this.state.showSend? 'Go to received' :'Go to sent'}</Button>
+                <div className='messagesContainer'>
+                    <div className={this.state.showSend ? 'showSend' : ''}>
                         <h4>Received Messages</h4>
-                        <MessageReader msgType="received" 
+                        <MessageReader msgType='received' 
                         username={this.props.username?this.props.username:null}
                         roles={this.props.roles}/>
                     </div>
-                    <div className={this.state.showSend ? "showSend" : ""}>
+                    <div className={this.state.showSend ? 'showSend' : ''}>
                         <h4>Sent Messages</h4>
-                        <MessageReader msgType="sent" 
+                        <MessageReader msgType='sent' 
                         username={this.props.username?this.props.username:null}
                         roles={this.props.roles}/>
                     </div>

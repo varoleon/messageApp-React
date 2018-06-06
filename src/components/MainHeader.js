@@ -6,12 +6,12 @@ export class MainHeader extends Component {
     }
     render() {
         return (
-            <header className="d-flex justify-content-between align-items-center mainHeader">
-                <div className="logo">
-                    <i className="fas fa-comment"></i>
+            <header className='d-flex justify-content-between align-items-center mainHeader'>
+                <div className='logo'>
+                    <i className='fas fa-comment'></i>
                 </div >
                 <h4>Hello {this.props.user.username}</h4>
-                <div className="point logout" onClick={this.props.handleLogout} ><span>Log out</span><i className="fas fa-sign-out-alt"></i></div>
+                <div className='point logout' onClick={this.props.handleLogout} ><span>Log out</span><i className='fas fa-sign-out-alt'></i></div>
             </header >
         )
     }

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../config/config";
+import { API_BASE_URL } from '../config/config'
 
 export const logout = () => {
     localStorage.getItem('accessToken') ?
@@ -7,7 +7,7 @@ export const logout = () => {
 
 export const getAllUsersRequest = () => {
     const request = ({
-        url: API_BASE_URL + "users",
+        url: API_BASE_URL + 'users',
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ export const getAllUsersRequest = () => {
 export const getMessagesRequest = (msgType, username) => {
     // const msgType = this.props.msgType
     const request = ({
-        url: API_BASE_URL + "message/" + msgType + "messages" + (username == null ? '' : "/" + username),
+        url: API_BASE_URL + 'message/' + msgType + 'messages' + (username == null ? '' : '/' + username),
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -28,12 +28,12 @@ export const getMessagesRequest = (msgType, username) => {
         })
     })
 
-    return request;
+    return request
 }
 
 export const deleteMessageRequest = (id) => {
     const request = ({
-        url: API_BASE_URL + "message/deletemessage/" + id,
+        url: API_BASE_URL + 'message/deletemessage/' + id,
         method: 'POST',
         headers: new Headers({
             'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
@@ -58,7 +58,7 @@ export const sendMessageRequest = (reqBody) => {
 
 export const loginRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "auth/signin",
+        url: API_BASE_URL + 'auth/signin',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const editMsgRequest = (reqBody) => {
 
 export const signupRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "auth/signup",
+        url: API_BASE_URL + 'auth/signup',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ getAllUsersDetailsRequest
 
 export const getAllUsersDetailsRequest = () => {
     const request = ({
-        url: API_BASE_URL + "users/rolelist",
+        url: API_BASE_URL + 'users/rolelist',
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const getAllUsersDetailsRequest = () => {
 
 export const addRoleRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "users/addrole",
+        url: API_BASE_URL + 'users/addrole',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export const addRoleRequest = (reqBody) => {
 
 export const removeRoleRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "users/deleterole",
+        url: API_BASE_URL + 'users/deleterole',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ export const removeRoleRequest = (reqBody) => {
 
 export const updateNameRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "users/updatename",
+        url: API_BASE_URL + 'users/updatename',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -148,7 +148,7 @@ export const updateNameRequest = (reqBody) => {
 
 export const updatePasswordRequest = (reqBody) => {
     const request = ({
-        url: API_BASE_URL + "users/updatepassword",
+        url: API_BASE_URL + 'users/updatepassword',
         method: 'POST',
         headers: new Headers({
             'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export const updatePasswordRequest = (reqBody) => {
 
 export const getCurrentUserRequest = () => {
     const request = ({
-        url: API_BASE_URL + "users/about/me",
+        url: API_BASE_URL + 'users/about/me',
         method: 'GET',
         headers: new Headers({
             'Content-Type': 'application/json',

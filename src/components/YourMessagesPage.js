@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { MessageBoard } from '../messages/MessageBoard';
+import { MessageBoard } from '../messages/MessageBoard'
 
 
 export class YourMessagesPage extends Component {

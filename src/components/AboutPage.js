@@ -17,10 +17,10 @@ export class AboutPage extends Component {
 
                 Find us in Github:
                 <ul>
-                <li><a href="https://github.com/elpaidousi/">-@elpaidousi</a></li>
-                <li><a href="https://github.com/NikolidakisDimitris/">-@NikolidakisDimitris</a></li>
-                <li><a href="https://github.com/varoleon/">-@varoleon</a></li>
-                <li><a href="https://github.com/Milaskaris/">-@Milaskaris</a></li>
+                <li><a href='https://github.com/elpaidousi/'>-@elpaidousi</a></li>
+                <li><a href='https://github.com/NikolidakisDimitris/'>-@NikolidakisDimitris</a></li>
+                <li><a href='https://github.com/varoleon/'>-@varoleon</a></li>
+                <li><a href='https://github.com/Milaskaris/'>-@Milaskaris</a></li>
 
                 </ul>
             </div>

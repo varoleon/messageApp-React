@@ -6,7 +6,7 @@ export class EditMessage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            text: "",
+            text: '',
             pending: false
         }
 
@@ -26,9 +26,9 @@ export class EditMessage extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
             )
 
@@ -66,9 +66,9 @@ export class EditMessage extends Component {
         return (
             <div>
                 <Form onSubmit={this.handleSubmit}>
-                    <Input type='textarea' name='editMsg' className="mb-2" rows={4} value={this.state.text} onChange={this.handleChange} />
-                    <div className="my-1 text-right">{250 - this.state.text.length} characters left</div>
-                    <Button type="submit" size="sm" color="success" 
+                    <Input type='textarea' name='editMsg' className='mb-2' rows={4} value={this.state.text} onChange={this.handleChange} />
+                    <div className='my-1 text-right'>{250 - this.state.text.length} characters left</div>
+                    <Button type='submit' size='sm' color='success' 
                     disabled={ this.state.text.length > 250 
                         || this.state.text.length < 1 }>Edit</Button>
                 </Form>

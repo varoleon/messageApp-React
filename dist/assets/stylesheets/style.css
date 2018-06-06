@@ -303,7 +303,7 @@ input:placeholder-shown~label {
 }
 
 .deleteMessage{
-    transform:translateY(400px) rotateZ(90deg);
+    transform:translateY(50rem) rotateZ(90deg);
     transform-origin: top left;
     opacity: 0;
 }

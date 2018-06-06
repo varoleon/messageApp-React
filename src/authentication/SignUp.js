@@ -1,26 +1,26 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input, FormFeedback, Alert } from 'reactstrap'
-import { signupRequest } from "../utils/Utils"
+import { signupRequest } from '../utils/Utils'
 
 
 export class SignUp extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "",
-            username: "",
-            email: "",
-            password: "",
-            formErrors: { email: "", password: "", name: "", username: "" },
+            name: '',
+            username: '',
+            email: '',
+            password: '',
+            formErrors: { email: '', password: '', name: '', username: '' },
             emailValid: false,
             passwordValid: false,
             nameValid: false,
             usernameValid: false
         }
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleMessage = this.handleMessage.bind(this);
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleMessage = this.handleMessage.bind(this)
     }
 
     signup(request) {
@@ -28,48 +28,48 @@ export class SignUp extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
-            );
+            )
     }
 
     handleChange(event) {
-        console.log(event.target.name);
-        const name = event.target.name;
-        const value = event.target.value;
+        console.log(event.target.name)
+        const name = event.target.name
+        const value = event.target.value
 
         this.setState({ [name]: value },
-            () => { this.validateField(name, value) });
+            () => { this.validateField(name, value) })
     }
 
     validateField(fieldName, value) {
-        let fieldValidationErrors = this.state.formErrors;
-        let emailValid = this.state.emailValid;
-        let passwordValid = this.state.passwordValid;
-        let nameValid = this.state.nameValid;
-        let usernameValid = this.state.usernameValid;
+        let fieldValidationErrors = this.state.formErrors
+        let emailValid = this.state.emailValid
+        let passwordValid = this.state.passwordValid
+        let nameValid = this.state.nameValid
+        let usernameValid = this.state.usernameValid
 
         switch (fieldName) {
             case 'email':
-                emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValid ? '' : 'Email is invalid';
-                break;
+                emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)
+                fieldValidationErrors.email = emailValid ? '' : 'Email is invalid'
+                break
             case 'password':
-                passwordValid = value.length >= 6;
-                fieldValidationErrors.password = passwordValid ? '' : 'Password is too short';
-                break;
+                passwordValid = value.length >= 6
+                fieldValidationErrors.password = passwordValid ? '' : 'Password is too short'
+                break
             case 'name':
-                nameValid = value.length > 0;
-                fieldValidationErrors.name = nameValid ? '' : 'Name is required';
-                break;
+                nameValid = value.length > 0
+                fieldValidationErrors.name = nameValid ? '' : 'Name is required'
+                break
             case 'username':
-                usernameValid = value.length > 0;
-                fieldValidationErrors.username = usernameValid ? '' : 'Username is required';
-                break;
+                usernameValid = value.length > 0
+                fieldValidationErrors.username = usernameValid ? '' : 'Username is required'
+                break
             default:
-                break;
+                break
         }
         this.setState({
             formErrors: fieldValidationErrors,
@@ -77,7 +77,7 @@ export class SignUp extends Component {
             passwordValid: passwordValid,
             nameValid: nameValid,
             usernameValid: usernameValid
-        }, this.validateForm);
+        }, this.validateForm)
     }
 
     validateForm() {
@@ -86,7 +86,7 @@ export class SignUp extends Component {
                 this.state.passwordValid &&
                 this.state.nameValid &&
                 this.state.usernameValid
-        });
+        })
     }
 
     handleMessage(msg) {
@@ -94,13 +94,13 @@ export class SignUp extends Component {
     }
 
     handleSubmit(event) {
-        // alert(this.state);
-        event.preventDefault();
+        // alert(this.state)
+        event.preventDefault()
 
 
         this.handleMessage({
-            type: "info",
-            message: "Loading. Plese Wait..."
+            type: 'info',
+            message: 'Loading. Plese Wait...'
         })
 
         const signupReqBody = {
@@ -114,24 +114,24 @@ export class SignUp extends Component {
         this.signup(request)
             .then(response => {
                 this.handleMessage({
-                    type: "success",
-                    message: "User registered successfully. Please login"
+                    type: 'success',
+                    message: 'User registered successfully. Please login'
                 })
                 this.props.tabhandler('login')
             })
             .catch(error => {
                 this.handleMessage({
-                    type: "danger",
+                    type: 'danger',
                     message: error.message
                 })
             })
 
 
         this.setState({
-            name: "",
-            username: "",
-            email: "",
-            password: "",
+            name: '',
+            username: '',
+            email: '',
+            password: '',
             emailValid: false,
             passwordValid: false,
             nameValid: false,
@@ -143,51 +143,51 @@ export class SignUp extends Component {
     render() {
 
         return (
-            <div className="container">
-                <Form onSubmit={this.handleSubmit} autoComplete="off">
+            <div className='container'>
+                <Form onSubmit={this.handleSubmit} autoComplete='off'>
 
                     <FormGroup>
-                        <Input type="text" id="username" name="username" placeholder="Username"
+                        <Input type='text' id='username' name='username' placeholder='Username'
                             invalid={(this.state.formErrors.username.length > 0)}
                             onChange={this.handleChange}
                             value={this.state.username}
                         />
                         <FormFeedback>{this.state.formErrors.username}</FormFeedback>
-                        <Label for="username">Username</Label>
+                        <Label for='username'>Username</Label>
                     </FormGroup>
 
                     <FormGroup>
-                        <Input type="password" id="password" name="password" placeholder="Password"
+                        <Input type='password' id='password' name='password' placeholder='Password'
                             invalid={(this.state.formErrors.password.length > 0)}
                             onChange={this.handleChange}
                             value={this.state.password}
                         />
 
                         <FormFeedback>{this.state.formErrors.password}</FormFeedback>
-                        <Label for="password">Password</Label>
+                        <Label for='password'>Password</Label>
                     </FormGroup>
 
 
                     <FormGroup>
-                        <Input type="text" id="name" name="name" placeholder="Name"
+                        <Input type='text' id='name' name='name' placeholder='Name'
                             invalid={(this.state.formErrors.name.length > 0)}
                             onChange={this.handleChange}
                             value={this.state.name}
                         />
                         <FormFeedback>{this.state.formErrors.name}</FormFeedback>
-                        <Label for="name">Name</Label>
+                        <Label for='name'>Name</Label>
                     </FormGroup>
 
                     <FormGroup>
-                        <Input type="email" id="email" name="email" placeholder="Email"
+                        <Input type='email' id='email' name='email' placeholder='Email'
                             invalid={(this.state.formErrors.email.length > 0)}
                             onChange={this.handleChange}
                             value={this.state.email}
                         />
                         <FormFeedback>{this.state.formErrors.email}</FormFeedback>
-                        <Label for="email">Email</Label>
+                        <Label for='email'>Email</Label>
                     </FormGroup>
-                    <Button type="submit" color="primary"
+                    <Button type='submit' color='primary'
                         disabled={!this.state.formValid}>Sign up</Button>
                 </Form>
             </div>

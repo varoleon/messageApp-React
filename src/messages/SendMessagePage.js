@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { UsersListDetails } from '../users/UsersListDetails';
+import { UsersListDetails } from '../users/UsersListDetails'
 import { Button, Form, FormGroup, Label, Input, Alert, Col } from 'reactstrap'
 import { sendMessageRequest } from '../utils/Utils'
 
@@ -8,9 +8,9 @@ export class SendMessagePage extends Component {
         super(props)
         this.state = {
             receiver: null,
-            message: "",
+            message: '',
             sendStatus: {
-                statusMessage: "",
+                statusMessage: '',
                 pending: false,
                 success: false
             }
@@ -24,11 +24,11 @@ export class SendMessagePage extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.handlEscape, false)
+        document.addEventListener('keydown', this.handlEscape, false)
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.handlEscape, false)
+        document.removeEventListener('keydown', this.handlEscape, false)
     }
 
     handlEscape(e) {
@@ -46,7 +46,7 @@ export class SendMessagePage extends Component {
         this.setState({
             receiver: null,
             sendStatus: {
-                statusMessage: "",
+                statusMessage: '',
                 pending: false,
                 success: false
             }
@@ -54,8 +54,8 @@ export class SendMessagePage extends Component {
     }
 
     handleChange(event) {
-        const name = event.target.name;
-        const value = event.target.value;
+        const name = event.target.name
+        const value = event.target.value
 
         this.setState({ [name]: value })
     }
@@ -70,7 +70,7 @@ export class SendMessagePage extends Component {
         this.setState({
             sendStatus: {
                 pending: true,
-                statusMessage: "",
+                statusMessage: '',
                 success: false
             }
         })
@@ -78,8 +78,8 @@ export class SendMessagePage extends Component {
         const msgReqBody = {
             message: this.state.message,
             receiver: this.state.receiver,
-            id: "",
-            sender: ""
+            id: '',
+            sender: ''
         }
 
         const request = sendMessageRequest(msgReqBody)
@@ -87,11 +87,11 @@ export class SendMessagePage extends Component {
             .then(response => {
                 this.setState({
                     sendStatus: {
-                        statusMessage: "Your message has been sent succesfully!",
+                        statusMessage: 'Your message has been sent succesfully!',
                         pending: false,
                         success: true
                     },
-                    message: ""
+                    message: ''
                 })
             })
             .catch(error => {
@@ -110,9 +110,9 @@ export class SendMessagePage extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
             )
     }
@@ -136,29 +136,29 @@ export class SendMessagePage extends Component {
 
                         <UsersListDetails onSelect={this.selectUser} /> :
                         <div>
-                            <div className="edit-close point" onClick={this.close}>
-                                <span>Close <i className="fas fa-times"></i></span>
+                            <div className='edit-close point' onClick={this.close}>
+                                <span>Close <i className='fas fa-times'></i></span>
                             </div>
-                            <Form onSubmit={this.handleSubmit} autoComplete="off">
+                            <Form onSubmit={this.handleSubmit} autoComplete='off'>
                                 <FormGroup row>
 
-                                    <Label for="password" sm={2}>
+                                    <Label for='password' sm={2}>
                                         <span>To</span>
                                     </Label>
                                     <Col sm={10}>
-                                        <Input type="text" id="receiverUsername" name="receiverUsername" placeholder="Username" value={this.state.receiver} disabled />
+                                        <Input type='text' id='receiverUsername' name='receiverUsername' placeholder='Username' value={this.state.receiver} disabled />
                                     </Col>
 
                                 </FormGroup>
 
                                 <FormGroup row>
-                                    <Label for="message" sm={2}>Message</Label>
+                                    <Label for='message' sm={2}>Message</Label>
                                     <Col sm={10}>
-                                        <Input type="textarea" rows={4} sm={10} name="message" id="message" placeholder="Your message goes here..." onChange={this.handleChange} value={this.state.message} />
+                                        <Input type='textarea' rows={4} sm={10} name='message' id='message' placeholder='Your message goes here...' onChange={this.handleChange} value={this.state.message} />
                                     </Col>
                                 </FormGroup>
-                                <div className="my-1 text-right">{250 - this.state.message.length} characters left</div>
-                                <Button type="submit" color="primary" className="ml-auto d-flex"
+                                <div className='my-1 text-right'>{250 - this.state.message.length} characters left</div>
+                                <Button type='submit' color='primary' className='ml-auto d-flex'
                                     disabled={this.state.message.length > 250
                                         || this.state.message.length < 1}>
                                     Send

@@ -8,8 +8,8 @@ export class Login extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            usernameOrEmail: "",
-            password: "",
+            usernameOrEmail: '',
+            password: '',
             isLoading: false,
             success: false
         }
@@ -25,9 +25,9 @@ export class Login extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
             )
     }
@@ -42,10 +42,10 @@ export class Login extends Component {
 
 
     handleSubmit(event) {
-        event.preventDefault();
+        event.preventDefault()
         this.handleMessage({
-            type: "info",
-            message: "Loading. Plese Wait..."
+            type: 'info',
+            message: 'Loading. Plese Wait...'
         })
 
         const loginReqBody = {
@@ -60,20 +60,20 @@ export class Login extends Component {
                 localStorage.setItem('accessToken', response.accessToken)
                 console.log(localStorage.getItem('accessToken'))
                 this.handleMessage({
-                    type: "success",
-                    message: "Successful login"
+                    type: 'success',
+                    message: 'Successful login'
                 })
                 this.setState({ success: true })
                 this.handleLogin()
             })
             .catch(error => {
                 this.handleMessage({
-                    type: "danger",
+                    type: 'danger',
                     message: error.message
                 })
                 this.setState({
-                    usernameOrEmail: "",
-                    password: ""
+                    usernameOrEmail: '',
+                    password: ''
                 })
             })
     }
@@ -89,22 +89,22 @@ export class Login extends Component {
 
     render() {
         return (
-            <div className="container">
-                <Form onSubmit={this.handleSubmit} autoComplete="off">
+            <div className='container'>
+                <Form onSubmit={this.handleSubmit} autoComplete='off'>
 
                     <FormGroup>
-                        <Input type="text" name="usernameOrEmail" id="usernameOrEmail" placeholder="Username or Email"
+                        <Input type='text' name='usernameOrEmail' id='usernameOrEmail' placeholder='Username or Email'
                             onChange={this.handleChange} value={this.state.usernameOrEmail}
                         />
                         <FormFeedback>Required</FormFeedback>
-                        <Label for="userameOrEmail" >Username or Email</Label>
+                        <Label for='userameOrEmail' >Username or Email</Label>
                     </FormGroup>
                     <FormGroup>
-                        <Input type="password" name="password" id="password" placeholder="Password"
+                        <Input type='password' name='password' id='password' placeholder='Password'
                             onChange={this.handleChange} value={this.state.password} />
-                        <Label for="password">Password</Label>
+                        <Label for='password'>Password</Label>
                     </FormGroup>
-                    <Button type="submit" color="primary"
+                    <Button type='submit' color='primary'
                         disabled={!(this.state.usernameOrEmail.length > 0 && this.state.password.length > 0)}>
                         Login</Button>
                 </Form>

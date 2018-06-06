@@ -6,8 +6,8 @@ export class EditPassword extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            newPassword: "",
-            verifyPassword: "",
+            newPassword: '',
+            verifyPassword: '',
             validPassword: null,
             verified: null
         }
@@ -52,9 +52,9 @@ export class EditPassword extends Component {
             .then(response =>
                 response.json().then(json => {
                     if (!response.ok) {
-                        return Promise.reject(json);
+                        return Promise.reject(json)
                     }
-                    return json;
+                    return json
                 })
             )
             .then(response => {
@@ -68,34 +68,34 @@ export class EditPassword extends Component {
             <Form onSubmit={this.handleSubmit} >
                 <Row noGutters>
                     <Col xs={8}>
-                        <Input className="my-1" type="password" name="newPassword" id="newPassword"
-                            value={this.state.newPassword} placeholder="New password"
+                        <Input className='my-1' type='password' name='newPassword' id='newPassword'
+                            value={this.state.newPassword} placeholder='New password'
                             onChange={this.handleChange}
                             invalid={this.state.validPassword != null ? !
                                 this.state.validPassword : false}
 
                         />
-                        <Input className="my-1" type="password" name="verifyPassword" id="verifyPassword"
-                            value={this.state.verifyPassword} placeholder="Verify password"
+                        <Input className='my-1' type='password' name='verifyPassword' id='verifyPassword'
+                            value={this.state.verifyPassword} placeholder='Verify password'
                             onChange={this.handleChange}
                             invalid={this.state.verified != null ? !
                                 this.state.verified : false}
 
                         />
                     </Col>
-                    <Col className="d-flex align-items-end">
-                        <Button className="my-1" type="submit"
+                    <Col className='d-flex align-items-end'>
+                        <Button className='my-1' type='submit'
                         disabled={!this.state.verified || !this.state.validPassword}
                         >
                             ok
                         </Button>
                     </Col>
-                    <Col className="d-flex align-items-end">
-                        <div className="my-1">
+                    <Col className='d-flex align-items-end'>
+                        <div className='my-1'>
                             {this.state.success != null ?
                                 this.state.success ?
-                                    <i style={{ color: "green" }} className="fas fa-check p-2"></i>
-                                    : <i style={{ color: "red" }} className="fas fa-times p-2"></i>
+                                    <i style={{ color: 'green' }} className='fas fa-check p-2'></i>
+                                    : <i style={{ color: 'red' }} className='fas fa-times p-2'></i>
                                 : null
                             }
                         </div>

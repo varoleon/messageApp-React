@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { getMessagesRequest, deleteMessageRequest } from '../utils/Utils'
 import { Alert } from 'reactstrap'
 
-import { EditMessage } from './EditMessage';
+import { EditMessage } from './EditMessage'
 
 export class MessageReader extends Component {
     constructor(props) {
@@ -13,8 +13,8 @@ export class MessageReader extends Component {
             editMode: false,
             deleteConfMsg: null,
             editResponse: {
-                id: "",
-                message: ""
+                id: '',
+                message: ''
             },
             error: null
         }
@@ -38,16 +38,23 @@ export class MessageReader extends Component {
     getMessages() {
         const request = getMessagesRequest(this.props.msgType, this.props.username)
         fetch(request.url, request)
-            .then(res => res.json())
+            .then(res => res.json()
+                .then(json => {
+                    if (!res.ok) {
+                        return Promise.reject(json)
+                    }
+                    return json
+                }))
             .then(
                 (result) => this.setState({
                     messages: result.sort((a, b) => a.id - b.id).reverse(),
                     isLoading: false
-                }),
-                (error) => this.setState({
-                    isLoading: false,
-                    error
                 })
+            )
+            .catch(error => this.setState({
+                isLoading: false,
+                error
+            })
             )
     }
 
@@ -55,7 +62,7 @@ export class MessageReader extends Component {
         if (this.state.editResponse.id == id
             && this.state.editResponse.message.length > 0) {
             return (
-                <div className="editResponse">
+                <div className='editResponse'>
                     {this.state.editResponse.message}
                 </div>
             )
@@ -66,18 +73,18 @@ export class MessageReader extends Component {
     drawMsgHeader(sender, receiver, id) {
         if (this.props.msgType === 'received') {
             return (
-                <div className="message__header">
-                    <div className="person">from: <span>{sender}</span></div>
+                <div className='message__header'>
+                    <div className='person'>from: <span>{sender}</span></div>
                     {this.drawEditResponse(id)}
-                    <div className="icon"><i className="fas fa-arrow-down"></i></div>
+                    <div className='icon'><i className='fas fa-arrow-down'></i></div>
                 </div>
             )
         } else if (this.props.msgType === 'sent') {
             return (
-                <div className="message__header">
-                    <div className="person">to: <span>{receiver}</span></div>
+                <div className='message__header'>
+                    <div className='person'>to: <span>{receiver}</span></div>
                     {this.drawEditResponse(id)}
-                    <div className="icon"><i className="fas fa-arrow-up"></i></div>
+                    <div className='icon'><i className='fas fa-arrow-up'></i></div>
                 </div>
             )
         }
@@ -86,7 +93,7 @@ export class MessageReader extends Component {
     handleEdit(e) {
         const id = e.target.getAttribute('data-key')
         if (this.state.editMode == id) {
-            this.setState({ editMode: "" })
+            this.setState({ editMode: '' })
         } else {
             this.setState({
                 editMode: id,
@@ -104,7 +111,7 @@ export class MessageReader extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
-                    document.getElementById(this.props.msgType+id).classList.add("deleteMessage")
+                    document.getElementById(this.props.msgType + id).classList.add('deleteMessage')
                     setTimeout(() =>
                         this.removeMsgFromList(id),
                         600)
@@ -113,7 +120,7 @@ export class MessageReader extends Component {
                     this.setState({
                         editResponse: {
                             id: id,
-                            message: "Delete error: " + error.message
+                            message: 'Delete error: ' + error.message
                         }
                     })
                 })
@@ -122,7 +129,7 @@ export class MessageReader extends Component {
     removeMsgFromList(id) {
         let msgListCopy = this.state.messages.slice()
         const index = msgListCopy.indexOf(this.state.messages.find(msg => msg.id == id))
-        // ?lert (index);
+        // ?lert (index)
         if (index > -1) {
             msgListCopy.splice(index, 1)
         }
@@ -132,14 +139,14 @@ export class MessageReader extends Component {
     }
 
     onSuccessEdit(id, txt) {
-        const msgListCopy = this.state.messages.slice();
+        const msgListCopy = this.state.messages.slice()
         const index = msgListCopy.indexOf(this.state.messages.find(msg => msg.id == id))
-        msgListCopy[index].message = txt;
+        msgListCopy[index].message = txt
         this.setState({
-            editMode: "",
+            editMode: '',
             editResponse: {
                 id: id,
-                message: "Updated successfully"
+                message: 'Updated successfully'
             },
             messages: msgListCopy
         })
@@ -148,10 +155,10 @@ export class MessageReader extends Component {
 
     onFailEdit(id, txt) {
         this.setState({
-            editMode: "",
+            editMode: '',
             editResponse: {
                 id: id,
-                message: "Update fail: " + txt
+                message: 'Update fail: ' + txt
             },
         })
 
@@ -171,54 +178,55 @@ export class MessageReader extends Component {
     render() {
         return (
             <div>
-                <div className="mb-1 text-right">{this.state.messages.length} messages</div>
-                {this.state.messages.length < 1 ? <div className="message noMessages">No messages</div> :
-                    this.state.messages.map(
-                        message =>
-                            <div key={message.id} id={this.props.msgType+message.id} className='message'>
+                <div className='mb-1 text-right'>{this.state.messages.length} messages</div>
+                {this.state.error ? <div className='message noMessages'>{this.state.error.message}</div> :
+                    this.state.messages.length < 1 ? <div className='message noMessages'>No messages</div> :
+                        this.state.messages.map(
+                            message =>
+                                <div key={message.id} id={this.props.msgType + message.id} className='message'>
 
 
-                                {this.drawMsgHeader(message.sender, message.receiver, message.id)}
+                                    {this.drawMsgHeader(message.sender, message.receiver, message.id)}
 
-                                {this.state.deleteConfMsg == message.id ?
-                                    <Alert color="danger" className="confirmation">
-                                        Are you sure you want to delete this message?
-                                        <div className="d-flex justify-content-around">
-                                            <div onClick={this.handleDelete} data-key={message.id} className="point text-danger">
-                                                Yes, delete it now!
+                                    {this.state.deleteConfMsg == message.id ?
+                                        <Alert color='danger' className='confirmation'>
+                                            Are you sure you want to delete this message?
+                                        <div className='d-flex justify-content-around'>
+                                                <div onClick={this.handleDelete} data-key={message.id} className='point text-danger'>
+                                                    Yes, delete it now!
                                             </div>
-                                            <div onClick={this.closeConfirm} className="point text-success">
-                                                No, keep it
+                                                <div onClick={this.closeConfirm} className='point text-success'>
+                                                    No, keep it
                                             </div>
-                                        </div>
-                                    </Alert>
-                                    : null
-                                }
-                                <div className="message__body">
-                                    {this.state.editMode == message.id ?
-                                        <EditMessage message={message}
-                                            onSuccess={this.onSuccessEdit}
-                                            onFailure={this.onFailEdit}
-                                        /> :
-                                        message.message}
-                                </div>
-                                <div className="message__tools">
-                                    {
-                                        (this.props.roles.indexOf('ROLE_ADMIN') != -1 ||
-                                            this.props.roles.indexOf('ROLE_GOD') != -1) ?
-                                            this.state.editMode != message.id ?
-                                                <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-edit"></i></div> :
-                                                <div><i data-key={message.id} onClick={this.handleEdit} className="fas fa-times"></i></div>
-                                            : null
+                                            </div>
+                                        </Alert>
+                                        : null
                                     }
-                                    <div >
-                                        <i data-key={message.id} onClick={this.deleteConfirmation} className="fas fa-trash-alt"></i>
+                                    <div className='message__body'>
+                                        {this.state.editMode == message.id ?
+                                            <EditMessage message={message}
+                                                onSuccess={this.onSuccessEdit}
+                                                onFailure={this.onFailEdit}
+                                            /> :
+                                            message.message}
+                                    </div>
+                                    <div className='message__tools'>
+                                        {
+                                            (this.props.roles.indexOf('ROLE_ADMIN') != -1 ||
+                                                this.props.roles.indexOf('ROLE_GOD') != -1) ?
+                                                this.state.editMode != message.id ?
+                                                    <div><i data-key={message.id} onClick={this.handleEdit} className='fas fa-edit'></i></div> :
+                                                    <div><i data-key={message.id} onClick={this.handleEdit} className='fas fa-times'></i></div>
+                                                : null
+                                        }
+                                        <div >
+                                            <i data-key={message.id} onClick={this.deleteConfirmation} className='fas fa-trash-alt'></i>
+                                        </div>
+
                                     </div>
 
                                 </div>
-
-                            </div>
-                    )}
+                        )}
             </div>
         )
     }
