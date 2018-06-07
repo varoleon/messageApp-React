@@ -89,10 +89,12 @@ export class AdminPanel extends Component {
                                         <UserCard user={this.state.userEditing} />
                                     </Col>
                                     <Col className='mt-3 mt-md-0 d-flex flex-column justify-content-around'>
-                                        <div>
-                                            <div className='mb-1'>Add or Remove roles</div>
-                                            <AddRemoveRole user={this.state.userEditing} onEditRole={this.onEditRole} />
-                                        </div>
+                                        {this.state.userEditing.username !== this.props.user.username ?
+                                            <div>
+                                                <div className='mb-1'>Add or Remove roles</div>
+                                                <AddRemoveRole user={this.state.userEditing} onEditRole={this.onEditRole} />
+                                            </div>
+                                            : null}
 
                                         {this.state.userEditing.username == this.props.user.username ?
                                             <div>
