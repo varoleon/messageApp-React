@@ -54,11 +54,9 @@ export class Login extends Component {
         }
         const request = loginRequest(loginReqBody)
 
-        console.log(request)
         this.login(request)
             .then((response) => {
                 localStorage.setItem('accessToken', response.accessToken)
-                console.log(localStorage.getItem('accessToken'))
                 this.handleMessage({
                     type: 'success',
                     message: 'Successful login'
@@ -79,7 +77,6 @@ export class Login extends Component {
     }
 
     handleChange = (event) => {
-        console.log(event.target.name)
         const name = event.target.name
         const value = event.target.value
 

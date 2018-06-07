@@ -142,19 +142,19 @@ export class SendMessagePage extends Component {
                             <Form onSubmit={this.handleSubmit} autoComplete='off'>
                                 <FormGroup row>
 
-                                    <Label for='password' sm={2}>
+                                    <Label for='password' md={2}>
                                         <span>To</span>
                                     </Label>
-                                    <Col sm={10}>
+                                    <Col md={10}>
                                         <Input type='text' id='receiverUsername' name='receiverUsername' placeholder='Username' value={this.state.receiver} disabled />
                                     </Col>
 
                                 </FormGroup>
 
                                 <FormGroup row>
-                                    <Label for='message' sm={2}>Message</Label>
-                                    <Col sm={10}>
-                                        <Input type='textarea' rows={4} sm={10} name='message' id='message' placeholder='Your message goes here...' onChange={this.handleChange} value={this.state.message} />
+                                    <Label for='message' md={2}>Message</Label>
+                                    <Col md={10}>
+                                        <Input type='textarea' rows={4} md={10} name='message' id='message' placeholder='Your message goes here...' onChange={this.handleChange} value={this.state.message} />
                                     </Col>
                                 </FormGroup>
                                 <div className='my-1 text-right'>{250 - this.state.message.length} characters left</div>

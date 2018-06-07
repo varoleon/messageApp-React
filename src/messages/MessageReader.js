@@ -27,12 +27,14 @@ export class MessageReader extends Component {
     }
 
     componentDidMount() {
-        if (localStorage.getItem('accessToken')) {
-            this.setState({
-                isLoading: true
-            })
-            this.getMessages()
-        }
+        this.getMessages()
+        this.timerID = setInterval(
+            () => this.getMessages(),
+            10000
+        )
+    }
+    componentWillUnmount(){
+        clearInterval(this.timerID)
     }
 
     getMessages() {
